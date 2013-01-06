@@ -1,0 +1,134 @@
+# Makefile is generated from Makefile.in by configure
+# Don't edit Makefile, your changes will be lost.
+
+DIST          = @dist@
+VERSION       = @version@
+BASE_VERSION  = @base_version@
+ARCH          = @arch@
+REPO          = http://repository.spotify.com/pool/non-free/s/spotify
+LIB_REPO      = http://leamas.fedorapeople.org/spotify/$(BASE_VERSION)
+ARCHIVE       = @archive@
+SO_PERMS      = @so_perms@
+prefix        = @prefix@
+libdir        = @libdir@
+datadir       = @datadir@
+bindir        = @bindir@
+mandir        = @mandir@
+app_libdir    = $(libdir)/spotify-client
+app_datadir   = $(datadir)/spotify-client
+
+ifeq ($(DIST),Fedora)
+EXTRA_LIBS    = libssl.so.0.9.8 libcrypto.so.0.9.8
+else
+EXTRA_LIBS    =
+endif
+
+lib_to_data   := $(shell python -c 'import os.path;                          \
+                                    print os.path.relpath("$(app_datadir)",  \
+                                                          "$(app_libdir)")')
+bin_to_lib    := $(shell python -c 'import os.path;                          \
+                                    print os.path.relpath("$(app_libdir)",   \
+                                                          "$(bindir)")')
+
+all: sources
+
+sources: $(ARCHIVE) all_libs
+	@# Download all sources
+
+$(ARCHIVE):
+	wget -q -O $@ $(REPO)/$@
+
+all_libs: spotify.bash spotify.1 spotify.desktop $(EXTRA_LIBS)
+
+spotify.bash spotify.1 spotify.desktop:
+	wget -q -O $@ $(LIB_REPO)/$@
+
+ifeq ($(DIST),Fedora)
+$(EXTRA_LIBS):
+	wget -q -O $@ $(LIB_REPO)/$@.$(ARCH)
+endif
+
+clean:
+	rm -rf $(ARCHIVE) spotify.bash spotify.1 $(EXTRA_LIBS) opt usr
+	rm -rf control.tar.gz data.tar.gz *.deb debian-binary
+	rm -f spotify.desktop
+
+unpack: sources
+	@# Unpack into libdir (arched files) and datadir(noarch).
+	ar x $(ARCHIVE)
+	tar xzf data.tar.gz
+	rm -rf $(DESTDIR)/$(app_libdir) $(DESTDIR)/$(app_datadir)
+	mkdir -p $(DESTDIR)/$(app_libdir)  || :
+	mkdir -p $(DESTDIR)/$(app_datadir) || :
+	cp -ar ./opt/spotify/spotify-client/*  $(DESTDIR)/$(app_datadir)
+	mv $(DESTDIR)/$(app_datadir)/libcef.so $(DESTDIR)/$(app_libdir)
+	mv $(DESTDIR)/$(app_datadir)/spotify $(DESTDIR)/$(app_libdir)
+	@# Set so files perms to 755 (e. g, fedora) or 644 (e. g. debian).
+	chmod $(SO_PERMS) \
+	    $$( find $(DESTDIR)/$(app_libdir) -name '*.so*' -writable)
+
+extra_libs: unpack
+	[ -n "$(EXTRA_LIBS)" ] && \
+	    cp -a $(EXTRA_LIBS) $(DESTDIR)/$(app_libdir)  2>/dev/null || :
+
+addons: sources
+	@#  Manpage and wrapper script
+	sed -i '/^spotify=/s|.*|spotify=$(bin_to_lib)/spotify|' \
+	    spotify.bash
+	install -m 755 -pD spotify.bash $(DESTDIR)$(bindir)/spotify
+	mkdir -p $(DESTDIR)$(mandir)/man1 || :
+	cp spotify.1 $(DESTDIR)$(mandir)/man1
+
+applinks: unpack
+	@# Add links to datadir in libdir (where things are searched for).
+	cd $(DESTDIR)$(app_libdir);           \
+	ln -sf $(lib_to_data)/*.pak    .;     \
+	ln -sf $(lib_to_data)/locales  .;     \
+	ln -sf $(lib_to_data)/Data     .;
+
+syslinks: unpack extra_libs
+	@#  Try to find matching links in system for unresolved
+	@#  references in app.
+	cd $(DESTDIR)$(app_libdir);                                     \
+	for dep in $$( ldd  spotify | awk '/found$$/ {print $$1}' ); do  \
+	    case $$dep in                                                \
+	        libssl*)     hostlink="libssl.so.10" ;;                  \
+	        libcrypto*)  hostlink="libcrypto.so.10" ;;               \
+	        *)           hostlink="$${dep%%.*}" ;;                   \
+	    esac;                                                        \
+	    hostlink=$$( ldconfig -p | grep $$hostlink | sed 's/.*=>//'  \
+                        || echo "unknown" );                             \
+	    test "$$hostlink" != 'unknown' && ln -sf $$hostlink $$dep;   \
+	    [ "$$hostlink" = 'unknown' ] &&                              \
+	        echo "WARNING; cant resolve spotify dependency: $$dep";  \
+	done || :
+
+desktop:  unpack sources
+	@#  Install icons, desktop file etc.
+	for size in 24 32 48 64 128 256; do                                       \
+	    icondir="$(DESTDIR)$(datadir)/icons/hicolor/$${size}x$${size}";       \
+	    install -pD  $(DESTDIR)$(app_datadir)/Icons/spotify-linux-$$size.png  \
+	        $$icondir/apps/spotify-client.png;                                \
+	done
+	install spotify.desktop $(DESTDIR)$(datadir)/applications/spotify.desktop
+	install -pD spotify.1 $(DESTDIR)$(mandir)/man1/spotify.1
+
+install: applinks syslinks unpack addons extra_libs  desktop
+
+register:
+	@# Register icons and check desktop file. Not done by default, makes no
+	@# for a temporary install e. g., when packagin.
+	-gtk-update-icon-cache --ignore-theme-index \
+	    $(DESTDIR)$(datadir)/icons/hicolor
+	-desktop-file-validate $(DESTDIR)$(datadir)/applications/spotify.desktop
+
+uninstall:
+	rm -rf $(DESTDIR)$(app_datadir)
+	rm -rf $(DESTDIR)$(app_libdir)
+	rm -f $(DESTDIR)$(bindir)/spotify
+	rm -f $(DESTDIR)$(datadir)/icons/hicolor/*/apps/spotify-client.png
+	rm -f $(DESTDIR)$(mandir)/man1/spotify.1
+	rm -f $(DESTDIR)$(datadir)/applications/spotify.desktop
+	rm -f $(DESTDIR)$(datadir)/applications/spotify.desktop
+
+

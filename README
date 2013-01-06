@@ -1,0 +1,34 @@
+This is an attempt to create something which installs the spotify
+debian package in a distro independent way. We have two files:
+configure and Makefile.in.
+
+Although not based on automake in any way it's run in the same way
+using configure, make and make install. Some examples:
+
+Installing in system directories e. g., installing in
+/opt/local/lib and /opt/local/share with a binary in /usr/bin:
+
+   $ ./configure  --prefix=/opt --bindir=/usr/bin
+   $ make
+   # make install
+   # make register
+
+Installing in a temporary dir e. g. in a packaging context:
+
+   $ ./configure --prefix=/usr
+   $ make
+   $ make DESTDIR=/tmp/spotify install
+
+Making a user install without root privileges installs in
+~/.local/share with a binary in ~/bin
+
+   $ ./configure --user
+   $ make
+   $ make DESTDIR=/tmp/spotify install
+   $ make register
+
+Other variants are possible using e. g. the --bindir or --libdir
+arguments to configure. Use configure -h to find out. The register
+target notifies system about new icons etc. There is also a
+'uninstall' target.
+
