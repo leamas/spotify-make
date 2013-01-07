@@ -1,6 +1,6 @@
 spotify installer README
 
-USAGE
+==USAGE==
 
 This is an attempt to create something which installs the spotify
 debian package in a distro independent way. The goal is to support
@@ -8,8 +8,8 @@ three usecases:
 
   - User-only install without root privileges.
   - System-wide FHS-compliant installs in e. g., /usr/local, separating
-    architecture-dependent data and arched according to FHS, keeping
-    handling different data in .../lib vs .../li64.
+    architecture-dependent data and arched according to FHS, handling
+    different data in .../lib vs .../lib64.
   - Temporary installs used in a packaging context.
 
 Although not based on automake in any way it's run in the same way
@@ -48,7 +48,7 @@ This has so far only been tested on Fedora, so don't expect to run out
 of the box elsewhere. Time will tell if this is usable enough to get the
 proper fixes for other distros. As of now, this is just an experiment.
 
-DEPENDENCIES
+==DEPENDENCIES==
 
 This is an installer, not a package. It has no automatic dependencies.
 That said, the configure script tries to check the buildtime dependencies
@@ -61,7 +61,7 @@ in some simple cases. This is reported as INFO: lines.
 If there is unresolved runtime dependencies in spotify it's reported as
 ERROR lines.
 
-USER INSTALLS
+==USER INSTALLS==
 
 User installs have some caveats:
 
@@ -78,7 +78,7 @@ User installs have some caveats:
   enter these options *after* the --user option.
 
 
-LICENSE
+==LICENSE==
 
 These files are in public domain, you can do whatever you like with them.
 
