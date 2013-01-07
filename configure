@@ -65,6 +65,10 @@ echo -n "    python: "
 sts="$(python --version 2>&1) (ok)" || sts="ERROR: Not found"
 echo $sts
 
+echo -n "    wget: "
+sts="$(wget --version | head -1) (ok)" || sts="ERROR: Not found"
+echo $sts
+
 echo -n "    zenity: "
 sts="$(zenity --version 2>/dev/null) (ok)" || sts="ERROR: Not found"
 echo $sts
@@ -81,11 +85,12 @@ sts="$(make --version 2>/dev/null| head -1) (ok)" \
 echo $sts
 
 echo -n "    install: "
-sts="(ok)"
-install -pD configure foo/bar
-[[ -d foo && -f foo/bar ]] && rm -rf foo \
-    || sts="ERROR: install -pD doesn't work as expected."
-rm -rf foo
+sts="$(install --version | head -1) (ok)" && {
+    install -pD configure foo/bar
+    [[ -d foo && -f foo/bar ]] && rm -rf foo \
+        || sts="ERROR: install -pD doesn't work as expected."
+    rm -rf foo
+} || sts= "ERROR: not found"
 echo $sts
 
 echo -n "    desktop-file-validate: "
