@@ -41,9 +41,10 @@ bin_to_lib    := $(shell python -c 'import os.path;                          \
                                     print os.path.relpath("$(app_libdir)",   \
                                                           "$(bindir)")')
 
+all: help
+
 all_libs: spotify.bash spotify.1 spotify.desktop $(EXTRA_LIBS)
 
-all: help
 help:
 	@echo -e "\n$(HELP_MSG)\n"
 
