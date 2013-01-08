@@ -27,7 +27,7 @@ Usage: configure [options]
 --mandir=path  Directory for manual pages, defaults to $mandir.
 --user         Configure for personal install.
 --local        Don't download anything from spotify repo. Requires
-               version= and file= environmant variables
+               version= and file= environment variables
 
 Variables:
    version:    Spotify version, by default parsed from repo.
@@ -89,6 +89,10 @@ echo $sts
 echo -n "    ldconfig: "
 sts="$(ldconfig --version 2>/dev/null| head -1) (ok)" \
     || sts="ERROR: Not found"
+echo $sts
+
+echo -n "    lsb_release: "
+sts="trying -i: $(lsb_release -i ) (ok)" || sts="ERROR: Not found"
 echo $sts
 
 echo -n "    make: "
