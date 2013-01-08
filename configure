@@ -82,47 +82,51 @@ if [  -z "$local_" ]; then
 fi
 
 echo -n "    zenity: "
-sts="$(zenity --version 2>/dev/null) (ok)" || \
-    sts="WARNING: Not found (make will run, but not spotify)"
+sts="$(zenity --version | sed 's/$/ (ok)/' || \
+         echo 'WARNING: Not found (make will run, but not spotify)')"
 echo $sts
 
 echo -n "    ldconfig: "
-sts="$(ldconfig --version 2>/dev/null| head -1) (ok)" \
-    || sts="ERROR: Not found"
+sts="$(ldconfig --version | head -1 | sed 's/$/ (ok)/' || \
+         echo 'ERROR: Not found')"
 echo $sts
 
 echo -n "    ar: "
-sts="$(ar --version | head -1| sed 's/$/ (ok)/' || echo 'ERROR: Not found')"
+sts="$(ar --version | head -1| sed 's/$/ (ok)/' || \
+         echo 'ERROR: Not found (in binutils package?)')"
 echo $sts
 
 
 echo -n "    lsb_release: "
-sts="trying -i: $(lsb_release -i ) (ok)" || sts="ERROR: Not found"
+sts="trying -i: $(lsb_release -i 2>&1 | sed 's/$/ (ok)/' || \
+         echo 'ERROR: Not found')"
 echo $sts
 
 echo -n "    make: "
-sts="$(make --version 2>/dev/null| head -1) (ok)" \
-    || sts="ERROR: Not found"
+sts="$(make --version 2>&1  | head -1 | sed 's/$/ (ok)/' || \
+    echo 'ERROR: Not found')"
 [[ $sts = *GNU* ]] || sts="ERROR: make is not GNU make."
 echo $sts
 
 echo -n "    install: "
-sts="$(install --version | head -1) (ok)" && {
+sts="$(install --version | head -1 | sed s'/$/ (ok)/'  || \
+    echo 'ERROR: not found' )"
+[[ "$sts" == ERROR* ]] || {
     install -pD configure foo/bar
     [[ -d foo && -f foo/bar ]] && rm -rf foo \
         || sts="ERROR: install -pD doesn't work as expected."
     rm -rf foo
-} || sts= "ERROR: not found"
+}
 echo $sts
 
 echo -n "    desktop-file-validate: "
-sts="$(desktop-file-validate -h &>/dev/null) (ok)" \
-    || sts="WARNING: Not found (make will run, but less than perfect)"
+sts="$(desktop-file-validate -h &>/dev/null && echo ' (ok)' || \
+     echo 'WARNING: Not found (make will run, but less than perfect)')"
 echo $sts
 
 echo -n "    gtk-update-icon-cache: "
-sts="$(gtk-update-icon-cache -h &>/dev/null) (ok)" \
-    || sts="WARNING: Not found (make will run, but less than perfect)"
+sts="$(gtk-update-icon-cache -h &>/dev/null && echo ' (ok)' || \
+    echo 'WARNING: Not found (make will run, but less than perfect)')"
 echo $sts
 
 echo -n "Determining distro:... "
