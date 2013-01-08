@@ -101,7 +101,7 @@ addons: check_sources
 	    spotify.bash
 	sed -i "s/version=.*/version=$(version)/" spotify.bash
 	install -m 755 -pD spotify.bash $(DESTDIR)$(bindir)/spotify
-	install -m 644 -pD spotify.1  $(DESTDIR)$(mandir)/man1
+	install -m 644 -pD spotify.1  $(DESTDIR)$(mandir)/man1/spotify.1
 
 applinks: unpack
 	@# Add links to datadir in libdir (where things are searched for).
