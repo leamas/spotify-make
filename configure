@@ -91,6 +91,11 @@ sts="$(ldconfig --version 2>/dev/null| head -1) (ok)" \
     || sts="ERROR: Not found"
 echo $sts
 
+echo -n "    ar: "
+sts="$(ar --version | head -1| sed 's/$/ (ok)/' || echo 'ERROR: Not found')"
+echo $sts
+
+
 echo -n "    lsb_release: "
 sts="trying -i: $(lsb_release -i ) (ok)" || sts="ERROR: Not found"
 echo $sts
@@ -164,7 +169,7 @@ fi
 echo $file
 
 echo -n "Determine permissions for shared libs (SO_PERMS)..."
-if [[ "$dist" = *Fedora* ]]; then
+if [[ "$dist" = *Fedora*  ||  "$dist" == *SUSE* ]]; then
     so_perms=755
 else
     so_perms=644
