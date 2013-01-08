@@ -26,6 +26,13 @@ Usage: configure [options]
 --bindir=path  Directory for binary, defaults to $bindir.
 --mandir=path  Directory for manual pages, defaults to $mandir.
 --user         Configure for personal install.
+--local        Don't download anything from spotify repo. Requires
+               version= and file= environmant variables
+
+Variables:
+   version:    Spotify version, by default parsed from repo.
+   file:       Complete spotify .deb filename, by default parsed
+               from repo
 EOF
 exit 0
 }
@@ -53,6 +60,9 @@ while [ "$1" != "" ]; do
             prefix=$HOME/.local
             on_prefix_change
             bindir=$HOME/bin
+	    ;;
+        --local)
+	    local_=1
             ;;
         *) usage
 	    ;;
@@ -65,12 +75,15 @@ echo -n "    python: "
 sts="$(python --version 2>&1) (ok)" || sts="ERROR: Not found"
 echo $sts
 
-echo -n "    wget: "
-sts="$(wget --version | head -1) (ok)" || sts="ERROR: Not found"
-echo $sts
+if [  -z "$local_" ]; then
+    echo -n "    wget: "
+    sts="$(wget --version | head -1) (ok)" || sts="ERROR: Not found"
+    echo $sts
+fi
 
 echo -n "    zenity: "
-sts="$(zenity --version 2>/dev/null) (ok)" || sts="ERROR: Not found"
+sts="$(zenity --version 2>/dev/null) (ok)" || \
+    sts="WARNING: Not found (make will run, but not spotify)"
 echo $sts
 
 echo -n "    ldconfig: "
@@ -109,10 +122,17 @@ dist=${dist##*:}
 dist=$( echo $dist )
 echo $dist
 
-echo -n "Determining version:... "
-wget -qO spotify.dir http://repository.spotify.com/pool/non-free/s/spotify
-version=$(grep 'spotify-client_.*amd64.deb' spotify.dir \
-              | sed 's/.*spotify-client_\([^-]*\).*/\1/')
+if [ -z "$local_" ]; then
+    echo -n "Determining version:... "
+    wget -qO spotify.dir http://repository.spotify.com/pool/non-free/s/spotify
+    version=$(grep 'spotify-client_.*amd64.deb' spotify.dir \
+                  | sed 's/.*spotify-client_\([^-]*\).*/\1/')
+elif [ -z "$version" ]; then
+    echo "ERROR: --local flag set but no version supplied, giving up"
+    exit 1
+else
+    echo -n "Using supplied version:..."
+fi
 echo $version
 
 echo -n "Determining base version:... "
@@ -127,9 +147,16 @@ else
 fi
 echo $arch
 
-echo -n "Determine .deb file..."
-file=$(grep "spotify-client.*$arch.deb" spotify.dir \
-            | sed 's/.*\(spotify-client.*deb\).*/\1/')
+if [ -z "$local_" ]; then
+    echo -n "Determine .deb file..."
+    file=$(grep "spotify-client.*$arch.deb" spotify.dir \
+                | sed 's/.*\(spotify-client.*deb\).*/\1/')
+elif [ -z "$file" ]; then
+    echo "ERROR: --local flag set but no file supplied, giving up"
+    exit 1
+else
+    echo -n "Using supplied file:..."
+fi
 echo $file
 
 echo -n "Determine permissions for shared libs (SO_PERMS)..."
@@ -140,7 +167,7 @@ else
 fi
 echo $so_perms
 
-rm spotify.dir
+rm -f spotify.dir
 
 echo "Configuration paths:"
 echo "    prefix:  $prefix"
