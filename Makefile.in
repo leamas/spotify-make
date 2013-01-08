@@ -123,7 +123,7 @@ syslinks: unpack extra_libs
 
 desktop:  unpack check_sources
 	@# Install icons, desktop file etc.
-	icondir="$(DESTDIR)$(datadir)/icons/hicolor";                    \
+	@icondir="$(DESTDIR)$(datadir)/icons/hicolor";                   \
 	src_icons="$(DESTDIR)$(app_datadir)/Icons";                      \
 	echo "Installing icons in $$icondir";                            \
 	for size in 24 32 48 64 128 256; do                              \
