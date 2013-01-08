@@ -144,6 +144,17 @@ addons: check_sources
 install: applinks syslinks unpack addons extra_libs desktop set_so_perms
 	cp Makefile $(DESTDIR)$(app_datadir)
 
+
+check-deps:
+	@deps=$$( ldd $(DESTDIR)$(app_libdir)/spotify | grep 'not.*found' ); \
+	if [ -z "$$deps" ]; then                                 \
+	    echo "OK";                                           \
+	    exit 0;                                              \
+	else                                                     \
+	    echo "Error: unresolved dependencies"; echo $$deps;  \
+	    exit 1;                                              \
+	fi
+
 register:
 	@# Register icons and check desktop file. Not done by default, makes
 	@# no sense for a temporary install e. g., when packaging.
