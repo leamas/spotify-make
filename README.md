@@ -9,7 +9,22 @@ three usecases:
   - System-wide FHS-compliant installs in e. g., /usr/local or /usr.
   - Temporary installs used in a packaging context.
 
+## Installation
+
+Either use git:
+```
+    $ git clone  https://github.com/leamas/spotify-make.git
+    $ cd spotify-make
+```
+or download a tarball and use that:
+```
+    $ wget https://github.com/leamas/spotify-make/tarball/master/spotify-make.tar.gz
+    $ tar xzf spotify-make.tar.gz
+    $ cd leamas-spotfy-make-*
+```
+
 ## Usage
+/spotify-make.tar.gz
 
 Although not based on automake in any way it's run in the same way
 using configure, make and make install. Some examples:
