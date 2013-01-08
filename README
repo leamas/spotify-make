@@ -39,6 +39,7 @@ sources already in place and the % substitutions available. The
 
     $ env version=%{version} file=%{SOURCE1} \
     >   ./configure --prefix=/usr --libdir=%{_libdir} --local
+    $ make install DESTDIR=/tmp/spotify
 
 Other variants are possible using e. g. the --bindir or --libdir
 arguments to configure. Use configure -h to find out. The register
