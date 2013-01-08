@@ -15,21 +15,6 @@ three usecases:
 Although not based on automake in any way it's run in the same way
 using configure, make and make install. Some examples:
 
-Installing in system directories e. g., installing in
-/opt/local/lib[64] and /opt/local/share with a binary in /usr/bin.
-(yes, bad example, I know):
-
-   $ ./configure  --prefix=/opt --bindir=/usr/bin
-   $ make download
-   # make install
-   # make register
-
-Installing in a temporary dir e. g. in a packaging context with all
-sources already in place:
-
-   $ ./configure --prefix=/usr --libdir=/lib64
-   $ make DESTDIR=/tmp/spotify install
-
 Making a user install without root privileges installs in
 ~/.local/share with a binary in ~/bin, downloading sources
 as required:
@@ -39,12 +24,28 @@ as required:
    $ make install
    $ make register
 
+Installing in system directories e. g., installing in
+/opt/local/lib and /opt/local/share with a binary in /usr/bin.
+(yes, bad example, I know):
+
+   $ ./configure  --prefix=/opt/local --bindir=/usr/bin
+   $ make download
+   # make install
+   # make register
+
+Installing in a temporary dir e. g. in a packaging context with all
+sources already in place and the % substitutions available. The
+--local flag disables downloading of any version data from spotify.
+
+    $ env version=%{version} file=%{SOURCE1} \
+    >   ./configure --prefix=/usr --libdir=%{_libdir} --local
+
 Other variants are possible using e. g. the --bindir or --libdir
 arguments to configure. Use configure -h to find out. The register
-target notifies system about new icons etc. There is also a
+target notifies system about new icons etc. There is also an
 'uninstall' target.
 
-This has so far only been tested on Fedora, so don't expect to run out
+This has so far only been tested on Fedora, so don't expect it to run out
 of the box elsewhere. Time will tell if this is usable enough to get the
 proper fixes for other distros. As of now, this is just an experiment.
 
@@ -55,11 +56,11 @@ That said, the configure script tries to check the buildtime dependencies
 and report missing items.
 
 The Makefile tracks the runtime dependencies from spotify using ldd. It
-will report missing links, and try to symlink to existing system libraries
-in some simple cases. This is reported as INFO: lines.
+tries to symlink to existing system libraries in simple cases. This is
+reported as INFO: lines.
 
-If there is unresolved runtime dependencies in spotify it's reported as
-ERROR lines.
+If there are unresolved runtime dependencies in spotify it's reported as
+WARNING: lines.
 
 ==USER INSTALLS==
 
@@ -69,14 +70,11 @@ User installs have some caveats:
   is a default setup on many (most? all?) distributions. Change with
   --bindir= to configure
 - The desktop file  and icons are installed under ~/.local/share. This is
-  according to opendesktop specs, and most tools will find them there. Not all,
-  though. Change with --datadir= to ./configure.
-- Manpage goes also to ~/.local/share/man/man1. Your MANPATH will probably need
+  according to opendesktop specs, and most tools will find them there. Perhaps
+  not all, though. Change with --datadir= to ./configure.
+- Manpage goes to ~/.local/share/man/man1. Your MANPATH will probably need
   an update to include  $HOME/.local/share/man. Change dir with --mandir=
   to ./configure. Manpage isn't that useful anyway.
-- If you want to tweak the paths using e. g. --bindir= or --datadir= you must
-  enter these options *after* the --user option.
-
 
 ==LICENSE==
 

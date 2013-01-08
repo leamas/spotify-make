@@ -25,14 +25,14 @@ Usage: configure [options]
 --libdir=path  Directory for arch data, defaults to $libdir.
 --bindir=path  Directory for binary, defaults to $bindir.
 --mandir=path  Directory for manual pages, defaults to $mandir.
---user         Configure for personal install.
+--user         Configure for personal install, nust be first option.
 --local        Don't download anything from spotify repo. Requires
-               version= and file= environment variables
+               version= and file= environment variables.
 
 Variables:
    version:    Spotify version, by default parsed from repo.
    file:       Complete spotify .deb filename, by default parsed
-               from repo
+               from repo.
 EOF
 exit 0
 }
