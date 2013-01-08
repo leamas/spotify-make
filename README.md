@@ -24,7 +24,6 @@ or download a tarball and use that:
 ```
 
 ## Usage
-/spotify-make.tar.gz
 
 Although not based on automake in any way it's run in the same way
 using configure, make and make install. Some examples:
@@ -74,8 +73,7 @@ The Makefile tracks the runtime dependencies from spotify using ldd. It
 tries to symlink to existing system libraries in simple cases. This is
 reported as INFO: lines.
 
-If there are unresolved runtime dependencies in spotify it's reported as
-WARNING: lines.
+Unresolved runtime dependencies in spotify is reported as WARNING: lines.
 
 ## User installs
 
