@@ -108,8 +108,8 @@ syslinks: unpack extra_libs
 	@cd $(DESTDIR)$(app_libdir);                                     \
 	for dep in $$( ldd  spotify | awk '/found$$/ {print $$1}' ); do  \
 	    case $$dep in                                                \
-	        libssl*)     hostlink="libssl.so.1*0*" ;;                \
-	        libcrypto*)  hostlink="libcrypto.so.1*0*" ;;             \
+	        libssl*)     hostlink='libssl.so.1.*0.*' ;;              \
+	        libcrypto*)  hostlink='libcrypto.so.1.*0.*' ;;           \
 	        *)           hostlink="$${dep%%.*}" ;;                   \
 	    esac;                                                        \
 	    hostlink=$$( ldconfig -p | grep $$hostlink | sed 's/.*=>//'  \
