@@ -113,7 +113,7 @@ syslinks: unpack extra_libs
 	        *)           hostlink="$${dep%%.*}" ;;                   \
 	    esac;                                                        \
 	    hostlink=$$( ldconfig -p | grep $$hostlink | sed 's/.*=>//'  \
-                         | grep '^[ ]*$(archlib)/' || :);                \
+                         | egrep '$(archlib)' || :);                     \
 	    if test "$$hostlink" != ''; then                             \
                 ln -sf $$hostlink $$dep;                                 \
 	        echo INFO: "resolving $$dep as \"$$hostlink\"";          \

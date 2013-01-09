@@ -155,10 +155,10 @@ echo $base_version
 echo -n "Determining arch:... "
 if [ $(uname -i) = 'x86_64' ]; then
     arch="amd64"
-    archlib='/lib64'
+    archlib='^[ ]*/.*64.*/.+'
 else
     arch="i386"
-    archlib='/lib'
+    archlib='^[ ]*/lib/|/usr/lib/'
 fi
 echo $arch
 
