@@ -12,6 +12,7 @@ Plain 'make' doesn't do anything. Targets: \n\
 dist          = @dist@
 base_version  = @base_version@
 arch          = @arch@
+archlib       = @archlib@
 repo          = http://repository.spotify.com/pool/non-free/s/spotify
 lib_repo      = http://leamas.fedorapeople.org/spotify/$(base_version)
 version       = @version@
@@ -112,7 +113,7 @@ syslinks: unpack extra_libs
 	        *)           hostlink="$${dep%%.*}" ;;                   \
 	    esac;                                                        \
 	    hostlink=$$( ldconfig -p | grep $$hostlink | sed 's/.*=>//'  \
-                        || :);                                           \
+                         | grep '^[ ]*$(archlib)/' || :);                \
 	    if test "$$hostlink" != ''; then                             \
                 ln -sf $$hostlink $$dep;                                 \
 	        echo INFO: "resolving $$dep as \"$$hostlink\"";          \
