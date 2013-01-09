@@ -200,7 +200,7 @@ sed -e  "s|@prefix@|$prefix|" \
     -e  "s|@version@|$version|" \
     -e  "s|@base_version@|$base_version|" \
     -e  "s|@arch@|$arch|" \
-    -e  "s|@archlib@|$archlib|" \
+    -e  "s;@archlib@;$archlib;" \
     -e  "s|@dist@|$dist|" \
     -e  "s|@archive@|$file|" \
     -e  "s|@so_perms@|$so_perms|" \
