@@ -62,12 +62,15 @@ $(archive):
 	wget -q -O $@ $(repo)/$@
 
 github:
-	rm -rf github; mkdir github;  cd github; \
-	git clone  https://github.com/leamas/spotify-make
+	repo='https://github.com/leamas/spotify-make'; \
+   	    wget  --quiet $$repo/tarball/master/spotify-make.tar.gz;
+	tar xzf spotify-make.tar.gz
+	mv -f leamas-spotify-make-* github
+	rm -f spotify-make.tar.gz
 
 
 spotify.bash spotify.1 spotify.desktop: github
-	cp github/spotify-make/$@ $@
+	cp github/$@ $@
 
 ifeq ($(dist),Fedora)
 $(EXTRA_LIBS):
