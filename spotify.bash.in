@@ -1,9 +1,5 @@
 #!/bin/bash
 
-path=$0
-[[ "$path" == /* ]] || path=$PWD/$path
-cd ${path%/*}
-
 spotify=../.local/lib/spotify-client/spotify
 version=0.8.8.323.gd143501.250
 
