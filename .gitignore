@@ -1,0 +1,8 @@
+*.deb
+*.gz
+*.so.*
+github
+debian-binary
+Makefile
+opt
+usr
