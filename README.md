@@ -1,8 +1,7 @@
 ## Spotify installer README
 
-
 This is an attempt to create something which installs the spotify
-debian package[1]  in a distro independent way. The goal is to support
+debian package[1] in a distro independent way. The goal is to support
 three usecases:
 
   - User-only install without root privileges.
@@ -20,7 +19,7 @@ or download a tarball and use that:
 ```
     $ wget https://github.com/leamas/spotify-make/tarball/master/spotify-make.tar.gz
     $ tar xzf spotify-make.tar.gz
-    $ cd leamas-spotfy-make-*
+    $ cd leamas-spotify-make-*
 ```
 
 ## Usage
@@ -37,9 +36,8 @@ as required:
     $ make install
     $ make register
 ```
-Installing in system directories e. g., installing in
-/opt/local/lib and /opt/local/share with a binary in /usr/bin.
-(yes, bad example, I know):
+Installing in system directories e. g., installing in /opt/local/lib and
+/opt/local/share with a binary in /usr/bin. (yes, bad example, I know):
 ```
     $ ./configure  --prefix=/opt/local --bindir=/usr/bin
     $ make download
@@ -112,7 +110,20 @@ Remember that Spotify's own terms are unclear but ATM said to be
   to work OK.
 - Have some discussion about possible merging of spotify-make into current spec.
 
+### Mageia
+ Current version installs OK but aborts when started:
+```
+Qt: Session management error: Could not open network socket
+Cannot mix incompatible Qt library (version 0x40802) with
+this library (version 0x40801)
+/home/al/bin/spotify: line 31:  5596 Aborted
+```
+There doesn't seem to be any easy way to downgrade the Qt stuff, so this is left as-is ATM.
+
+## References
 
 [1] http://community.spotify.com/t5/Desktop-Linux/bd-p/spotifylinux
+
 [2] https://help.ubuntu.com/community/SwitchingToUbuntu/FromLinux/RedHatEnterpriseLinuxAndFedora
+
 [3] https://wiki.archlinux.org/index.php/Pacman_Rosetta
