@@ -7,6 +7,5 @@ Exec=/bin/bash spotify %U
 TryExec=/bin/bash
 Terminal=false
 Type=Application
-Categories=Qt;Audio;Music;Player;AudioVideo;Education;
+Categories=Audio;AudioVideo;Player;Qt;
 MimeType=x-scheme-handler/spotify;
-
