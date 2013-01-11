@@ -26,53 +26,37 @@ mandir        = @mandir@
 app_libdir    = $(libdir)/spotify-client
 app_datadir   = $(datadir)/spotify-client
 
-ifeq ($(dist),Fedora)
-EXTRA_LIBS    = libssl.so.0.9.8 libcrypto.so.0.9.8
-else
-EXTRA_LIBS    =
-endif
+DOCS          =
 
-SOURCES       = spotify.bash spotify.1 spotify.desktop \
-                $(EXTRA_LIBS) $(archive)
+
+SOURCES       = spotify.bash spotify.1 spotify.desktop $(archive)
+ifeq ($(dist),Fedora)
+SOURCES      += $(wildcard fedora/$(arch)/*.so.*)
+else ifeq ($(dist),Ubuntu)
+SOURCES      += $(wildcard ubuntu/$(arch)/*.so.*)
+DOCS         += $(wildcard ubuntu/$(arch)/*)
+endif
 
 lib_to_data   := $(shell python -c 'import os.path;                          \
                                     print os.path.relpath("$(app_datadir)",  \
                                                           "$(app_libdir)")')
-bin_to_lib    := $(shell python -c 'import os.path;                          \
-                                    print os.path.relpath("$(app_libdir)",   \
-                                                          "$(bindir)")')
 
 all: help
 
 help:
 	@echo -e "\n$(help_msg)\n"
 
-download: $(SOURCES)
+download: $(archive)
 	@# Download all sources
 
 check_sources:
-	@for f in $(SOURCES); do                                         \
-	    test -f $$f || {                                            \
-	        echo "Source $$f not available (try 'make download')";  \
-	        exit 1;                                                 \
-	    }                                                           \
-	done
+	@test -f $(archive) || {                                    \
+	    echo "$(archive) not available (try 'make download')";  \
+	    exit 1;                                                 \
+	}
 
 $(archive):
 	wget -q -O $@ $(repo)/$@
-
-github:
-	rm -rf github; mkdir github;  cd github; \
-	git clone  https://github.com/leamas/spotify-make
-
-
-spotify.bash spotify.1 spotify.desktop: github
-	cp github/spotify-make/$@ $@
-
-ifeq ($(dist),Fedora)
-$(EXTRA_LIBS):
-	wget -q -O $@ $(lib_repo)/$@.$(arch)
-endif
 
 unpack: check_sources
 	@# Unpack into libdir (arched files) and datadir(noarch).
@@ -85,14 +69,21 @@ unpack: check_sources
 	mv $(DESTDIR)$(app_datadir)/libcef.so $(DESTDIR)$(app_libdir)
 	mv $(DESTDIR)$(app_datadir)/spotify $(DESTDIR)$(app_libdir)
 
-extra_libs: unpack
-	[ -n "$(EXTRA_LIBS)" ] && \
-	    cp -a $(EXTRA_LIBS) $(DESTDIR)$(app_libdir)  2>/dev/null || :
-
 set_so_perms: unpack
 	@# Set so files perms to 755 (e. g, fedora) or 644 (e. g. debian).
 	chmod $(so_perms) \
 	    $$( find $(DESTDIR)$(app_libdir) -name '*.so*' -writable)
+
+ifeq ($(dist),Fedora)
+bundled:  check_sources unpack
+	cp fedora/$(arch)/libssl.so.0.9.8 $(DESTDIR)$(app_libdir)
+	cp fedora/$(arch)/libcrypto.so.0.9.8 $(DESTDIR)$(app_libdir)
+else ifeq ($(dist),Ubuntu)
+bundled:  check_sources unpack
+	cp -a ubuntu/$(arch)/libssl.so.0.9.8 $(DESTDIR)$(app_libdir)
+	cp -a ubuntu/$(arch)/libcrypto.so.0.9.8 $(DESTDIR)$(app_libdir)
+endif
+	[ -n "$(DOCS)" ] && cp -a $(DOCS) $(DESTDIR)$(app_datadir) || :
 
 applinks: unpack
 	@# Add links to datadir in libdir (where things are searched for).
@@ -101,7 +92,7 @@ applinks: unpack
 	ln -sf $(lib_to_data)/locales  .;     \
 	ln -sf $(lib_to_data)/Data     .;
 
-syslinks: unpack extra_libs
+syslinks: unpack bundled
 	@# Match unresolved references found using ldd with system libs
 	@# in linker cache found using ldconfig -p. Create links and
 	@# report.
@@ -131,19 +122,17 @@ desktop:  unpack check_sources
 	    install -pD  $$src_icons/spotify-linux-$$size.png            \
 	        $$icondir/$${size}x$${size}/apps/spotify-client.png;     \
 	done
-	install -pD spotify.desktop     \
-	    $(DESTDIR)$(datadir)/applications/spotify.desktop
+	desktop-file-install --dir  $(DESTDIR)$(datadir)/applications    \
+	   spotify.desktop
 
 addons: check_sources
 	@#  Manpage and wrapper script
-	sed -i '/^spotify=/s|.*|spotify=$(bin_to_lib)/spotify|' \
-	    spotify.bash
-	sed -i "s/version=.*/version=$(version)/" spotify.bash
 	install -m 755 -pD spotify.bash $(DESTDIR)$(bindir)/spotify
 	install -m 644 -pD spotify.1  $(DESTDIR)$(mandir)/man1/spotify.1
 
-install: applinks syslinks unpack addons extra_libs desktop set_so_perms
+install: applinks syslinks unpack addons bundled desktop set_so_perms
 	cp Makefile $(DESTDIR)$(app_datadir)
+	cp README.md  $(DESTDIR)$(app_datadir)
 
 
 check-deps:
@@ -173,7 +162,7 @@ uninstall:
 	rm -f  $(DESTDIR)$(datadir)/applications/spotify.desktop
 
 clean:
-	rm -rf $(archive) spotify.bash spotify.1 $(EXTRA_LIBS) opt usr
+	rm -rf $(archive) spotify.bash spotify.1  opt usr
 	rm -rf control.tar.gz data.tar.gz *.deb debian-binary github
 	rm -f spotify.desktop Makefile
 
