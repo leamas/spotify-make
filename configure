@@ -26,13 +26,10 @@ Usage: configure [options]
 --bindir=path  Directory for binary, defaults to $bindir.
 --mandir=path  Directory for manual pages, defaults to $mandir.
 --user         Configure for personal install, nust be first option.
---local        Don't download anything from spotify repo. Requires
-               version= and file= environment variables.
+--package=path Downloaded spotify .deb package, by default determined
+               by examining the spotify download dir. Implies local
+	       operation, nothing is downloaded from spotify
 
-Variables:
-   version:    Spotify version, by default parsed from repo.
-   file:       Complete spotify .deb filename, by default parsed
-               from repo.
 EOF
 exit 0
 }
@@ -56,14 +53,18 @@ while [ "$1" != "" ]; do
         --bindir=*)
             bindir=${1##*=}
             ;;
+        --package=*)
+            package=${1##*=}
+	    [ -r "$package" ] || {
+	        echo "Cannot open package file" >&2
+		exit 2
+            }
+            ;;
         --user)
             prefix=$HOME/.local
             on_prefix_change
             bindir=$HOME/bin
 	    ;;
-        --local)
-	    local_=1
-            ;;
         *) usage
 	    ;;
     esac
@@ -75,7 +76,7 @@ echo -n "    python: "
 sts="$(python --version 2>&1) (ok)" || sts="ERROR: Not found"
 echo $sts
 
-if [  -z "$local_" ]; then
+if [  -z "$package" ]; then
     echo -n "    wget: "
     sts="$(wget --version | head -1) (ok)" || sts="ERROR: Not found"
     echo $sts
@@ -95,7 +96,6 @@ echo -n "    ar: "
 sts="$(ar --version | head -1| sed 's/$/ (ok)/' || \
          echo 'ERROR: Not found (in binutils package?)')"
 echo $sts
-
 
 echo -n "    lsb_release: "
 sts="trying -i: $(lsb_release -i 2>&1 | sed 's/$/ (ok)/' || \
@@ -129,22 +129,22 @@ sts="$(gtk-update-icon-cache -h &>/dev/null && echo ' (ok)' || \
     echo 'WARNING: Not found (make will run, but less than perfect)')"
 echo $sts
 
+
+
 echo -n "Determining distro:... "
 dist=$(lsb_release -i || echo "Unknown")
 dist=${dist##*:}
 dist=$( echo $dist )
 echo $dist
 
-if [ -z "$local_" ]; then
+if [ -z "$package" ]; then
     echo -n "Determining version:... "
     wget -qO spotify.dir http://repository.spotify.com/pool/non-free/s/spotify
     version=$(grep 'spotify-client_.*amd64.deb' spotify.dir \
                   | sed 's/.*spotify-client_\([^-]*\).*/\1/')
-elif [ -z "$version" ]; then
-    echo "ERROR: --local flag set but no version supplied, giving up"
-    exit 1
 else
-    echo -n "Using supplied version:..."
+    version=$( echo $package | sed 's/.*spotify-client_\([^-]*\).*/\1/' )
+    echo -n "Digging out version from --file:..."
 fi
 echo $version
 
@@ -162,17 +162,14 @@ else
 fi
 echo $arch
 
-if [ -z "$local_" ]; then
+if [ -z "$package" ]; then
     echo -n "Determine .deb file..."
-    file=$(grep "spotify-client.*$arch.deb" spotify.dir \
-                | sed 's/.*\(spotify-client.*deb\).*/\1/')
-elif [ -z "$file" ]; then
-    echo "ERROR: --local flag set but no file supplied, giving up"
-    exit 1
+    package=$(grep "spotify-client.*$arch.deb" spotify.dir \
+                  | sed 's/.*\(spotify-client.*deb\).*/\1/')
 else
-    echo -n "Using supplied file:..."
+    echo -n "Using supplied package:..."
 fi
-echo $file
+echo $package
 
 echo -n "Determine permissions for shared libs (SO_PERMS)..."
 if [[ "$dist" = *Fedora*  ||  "$dist" == *SUSE* ]]; then
@@ -202,7 +199,7 @@ sed -e  "s|@prefix@|$prefix|" \
     -e  "s|@arch@|$arch|" \
     -e  "s;@archlib@;$archlib;" \
     -e  "s|@dist@|$dist|" \
-    -e  "s|@archive@|$file|" \
+    -e  "s|@archive@|$package|" \
     -e  "s|@so_perms@|$so_perms|" \
 < Makefile.in > Makefile
 
