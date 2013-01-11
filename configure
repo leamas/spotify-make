@@ -12,7 +12,7 @@ function on_prefix_change()
     mandir=$datadir/man
 }
 
-prefix=/usr/local
+prefix='/usr/local'
 on_prefix_change
 
 function usage()
@@ -205,3 +205,12 @@ sed -e  "s|@prefix@|$prefix|" \
     -e  "s|@archive@|$file|" \
     -e  "s|@so_perms@|$so_perms|" \
 < Makefile.in > Makefile
+
+echo "Writing spotify.desktop"
+sed  "/Exec=/s|=.*|=$bindir/spotify %U|"  \
+    < spotify.desktop.in > spotify.desktop
+
+echo "Writing spotify.bash"
+sed  -e "/spotify=/s|=.*|=$libdir/spotify-client/spotify|" \
+     -e "/version=/s/=.*/=$version/"        \
+     <spotify.bash.in >spotify.bash

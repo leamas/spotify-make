@@ -40,9 +40,6 @@ endif
 lib_to_data   := $(shell python -c 'import os.path;                          \
                                     print os.path.relpath("$(app_datadir)",  \
                                                           "$(app_libdir)")')
-bin_to_lib    := $(shell python -c 'import os.path;                          \
-                                    print os.path.relpath("$(app_libdir)",   \
-                                                          "$(bindir)")')
 
 all: help
 
@@ -53,7 +50,7 @@ download: $(archive)
 	@# Download all sources
 
 check_sources:
-	test -f $(archive) || {                                     \
+	@test -f $(archive) || {                                    \
 	    echo "$(archive) not available (try 'make download')";  \
 	    exit 1;                                                 \
 	}
@@ -125,14 +122,11 @@ desktop:  unpack check_sources
 	    install -pD  $$src_icons/spotify-linux-$$size.png            \
 	        $$icondir/$${size}x$${size}/apps/spotify-client.png;     \
 	done
-	install -pD spotify.desktop     \
-	    $(DESTDIR)$(datadir)/applications/spotify.desktop
+	desktop-file-install --dir  $(DESTDIR)$(datadir)/applications    \
+	   spotify.desktop
 
 addons: check_sources
 	@#  Manpage and wrapper script
-	sed -i '/^spotify=/s|.*|spotify=$(bin_to_lib)/spotify|' \
-	    spotify.bash
-	sed -i "s/version=.*/version=$(version)/" spotify.bash
 	install -m 755 -pD spotify.bash $(DESTDIR)$(bindir)/spotify
 	install -m 644 -pD spotify.1  $(DESTDIR)$(mandir)/man1/spotify.1
 

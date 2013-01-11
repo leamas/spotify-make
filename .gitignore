@@ -5,4 +5,6 @@ github
 debian-binary
 Makefile
 opt
+spotify.bash
+spotify.desktop
 usr
