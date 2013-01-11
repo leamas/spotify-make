@@ -148,10 +148,6 @@ else
 fi
 echo $version
 
-echo -n "Determining base version:... "
-base_version=$( echo $version | sed 's/\([0-9][.][0-9][.][0-9]\).*/\1/' )
-echo $base_version
-
 echo -n "Determining arch:... "
 if [ $(uname -i) = 'x86_64' ]; then
     arch="amd64"
@@ -195,7 +191,6 @@ sed -e  "s|@prefix@|$prefix|" \
     -e  "s|@mandir@|$mandir|" \
     -e  "s|@datadir@|$datadir|" \
     -e  "s|@version@|$version|" \
-    -e  "s|@base_version@|$base_version|" \
     -e  "s|@arch@|$arch|" \
     -e  "s;@archlib@;$archlib;" \
     -e  "s|@dist@|$dist|" \

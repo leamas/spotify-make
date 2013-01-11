@@ -10,11 +10,9 @@ Plain 'make' doesn't do anything. Targets: \n\
    - uninstall:  Remove everything installed.
 
 dist          = @dist@
-base_version  = @base_version@
 arch          = @arch@
 archlib       = @archlib@
 repo          = http://repository.spotify.com/pool/non-free/s/spotify
-lib_repo      = http://leamas.fedorapeople.org/spotify/$(base_version)
 version       = @version@
 archive       = @archive@
 so_perms      = @so_perms@
