@@ -48,10 +48,9 @@ Installing in system directories e. g., installing in
 ```
 Installing in a temporary dir e. g. in a packaging context with all
 sources already in place and the % substitutions available. The
---local flag disables downloading of any version data from spotify.
+--package flag disables downloading of any data from spotify.
 ```
-    $ env version=%{version} file=%{SOURCE1} \
-    >   ./configure --prefix=/usr --libdir=%{_libdir} --local
+    $ ./configure --prefix=/usr --libdir=%{_libdir} --package=%{SOURCE1}
     $ make install DESTDIR=/tmp/spotify
 ```
 Other variants are possible using e. g. the --bindir or --libdir
@@ -61,9 +60,9 @@ target notifies system about new icons etc.  To uninstall the thing:
     $ cd "The $(datadir) used when installing"
     $ make uninstall
 ```
-This has so far only been tested on Fedora, so don't expect it to run out
-of the box elsewhere. Time will tell if this is usable enough to get the
-proper fixes for other distros. As of now, this is just an experiment.
+As of now, this is just an experiment, although there are succesful usacases
+from Fedora, Ubuntu and SUSE. There are certainly fixes needed to stabilize
+things though.
 
 ## Dependencies
 
