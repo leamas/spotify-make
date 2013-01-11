@@ -82,6 +82,8 @@ else ifeq ($(dist),Ubuntu)
 bundled:  check_sources unpack
 	cp -a ubuntu/$(arch)/libssl.so.0.9.8 $(DESTDIR)$(app_libdir)
 	cp -a ubuntu/$(arch)/libcrypto.so.0.9.8 $(DESTDIR)$(app_libdir)
+else
+bundled:  check_sources unpack
 endif
 	[ -n "$(DOCS)" ] && cp -a $(DOCS) $(DESTDIR)$(app_datadir) || :
 
