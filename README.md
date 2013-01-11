@@ -55,26 +55,40 @@ sources already in place and the % substitutions available. The
 ```
 Other variants are possible using e. g. the --bindir or --libdir
 arguments to configure. Use configure -h to find out. The register
-target notifies system about new icons etc.  To uninstall the thing:
+target notifies system about new icons etc. To uninstall the thing:
 ```
     $ cd "The $(datadir) used when installing"
     $ make uninstall
 ```
-As of now, this is just an experiment, although there are succesful usacases
-from Fedora, Ubuntu and SUSE. There are certainly fixes needed to stabilize
-things though.
+As of now, this is just an experiment although there are successful usecases
+from Fedora, Ubuntu, Mageia and SUSE. There are certainly fixes needed to
+stabilize things though.
 
 ## Dependencies
 
 This is an installer, not a package. It has no automatic dependencies.
 That said, the configure script tries to check the buildtime dependencies
-and report missing items.
+and reports them as ERROR e. g.,
+```
+   $ ./configure --user
+   Checking build and support dependencies
+       ...
+       make: ERROR: Not found
+```
+You are on your own here: you must find out the package which provides
+make and install it.
 
 The Makefile tracks the runtime dependencies from spotify using ldd. It
 tries to symlink to existing system libraries in simple cases. This is
-reported as INFO: lines.
-
-Unresolved runtime dependencies in spotify is reported as WARNING: lines.
+reported as INFO: lines. Unresolved runtime dependencies in spotify is
+reported as WARNING: lines e. g.:
+```
+    $ make install
+    ...
+    WARNING; cant resolve spotify dependency: libQtGui.so.4
+```
+Likewise, here you have to find the package providing libQtGui.so.4
+and install it.
 
 ## User installs
 
@@ -84,8 +98,8 @@ User installs have some caveats:
   system-wide 'spotify' installation.
 - The binary is by default installed in ~/bin.
 - The desktop file  and icons are installed under ~/.local/share. This is
-  according to opendesktop specs, and most tools will find them there.
-- Some systems (notably Ubunt/unity) requires a logout-login sequence to
+  according to freedesktop specs, and most tools will find them there.
+- Some systems (notably Ubuntu/unity) requires a logout-login sequence to
   pickup the installation in the menus.
 - Manpage goes to ~/.local/share/man/man1. Your MANPATH will probably need
   an update to include  $HOME/.local/share/man. Change dir with --mandir=
@@ -113,11 +127,11 @@ Remember that Spotify's own terms are unclear but ATM said to be
 - Current spec actually Conflicts libssl0.9.8, linking to 1.0.0 seems
   to work OK.
 - Have some discussion about possible merging of spotify-make into current spec.
-- 32-bit release 12 minimally tested.
+- 32-bit release 12.2 and upcoming 12.3 (Factory) minimally tested.
 
 ### Mageia
-Package bundles libqtdbus4-4.8.1 required by spotify; system version is
-4.8.2
+Minimally tested on version 2, 32-bit desktop release. Package bundles
+libqtdbus4-4.8.1 required by spotify; system version is 4.8.2
 
 ### Linux Mint
 Handled the same way as Ubuntu. Version 14 32-bit minimally tested.
@@ -132,4 +146,4 @@ Handled the same way as Ubuntu. Version 14 32-bit minimally tested.
 
 [4] https://bugs.launchpad.net/ubuntu/+source/desktop-file-utils/+bug/592671
 
-{5] https://bugs.launchpad.net/ubuntu/+source/meta-gnome2/+bug/572918
+[5] https://bugs.launchpad.net/ubuntu/+source/meta-gnome2/+bug/572918
