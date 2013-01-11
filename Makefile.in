@@ -132,6 +132,7 @@ addons: check_sources
 
 install: applinks syslinks unpack addons bundled desktop set_so_perms
 	cp Makefile $(DESTDIR)$(app_datadir)
+	cp README.md  $(DESTDIR)$(app_datadir)
 
 
 check-deps:

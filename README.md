@@ -56,9 +56,11 @@ sources already in place and the % substitutions available. The
 ```
 Other variants are possible using e. g. the --bindir or --libdir
 arguments to configure. Use configure -h to find out. The register
-target notifies system about new icons etc. There is also an
-'uninstall' target.
-
+target notifies system about new icons etc.  To uninstall the thing:
+```
+    $ cd "The $(datadir) used when installing"
+    $ make uninstall
+```
 This has so far only been tested on Fedora, so don't expect it to run out
 of the box elsewhere. Time will tell if this is usable enough to get the
 proper fixes for other distros. As of now, this is just an experiment.
@@ -80,7 +82,7 @@ Unresolved runtime dependencies in spotify is reported as WARNING: lines.
 User installs have some caveats:
 
 - The binary is by default in ~/bin. Your PATH must include this; this
-  is a default setup on many (most? all?) distributions. Change with
+  is a default setup on many (most?) distributions. Change with
   --bindir= to configure
 - The desktop file  and icons are installed under ~/.local/share. This is
   according to opendesktop specs, and most tools will find them there. Perhaps
@@ -95,5 +97,23 @@ These files are in public domain, you can do whatever you like with them.
 Remember that Spotify's own terms are unclear but ATM said to be
 "non-redistributable, no changes permitted"
 
+## System notes
+
+### Ubuntu
+- Works occasionally. 32 and 64-bits minimally tested.
+- Bundles the correct Debian libssl0.9.8.0.9.8o-4squeeze13.
+- Desktop does not pick up the newly installed package until after logout-login.
+
+### Fedora
+- Solves the libssl0.9.8 problem by bundling.
+- Works, both 64 and 32-bit.
+
+### SUSE
+- Current spec actually Conflicts libssl0.9.8, linking to 1.0.0 seems
+  to work OK.
+- Have some discussion about possible merging of spotify-make into current spec.
+
 
 [1] http://community.spotify.com/t5/Desktop-Linux/bd-p/spotifylinux
+[2] https://help.ubuntu.com/community/SwitchingToUbuntu/FromLinux/RedHatEnterpriseLinuxAndFedora
+[3] https://wiki.archlinux.org/index.php/Pacman_Rosetta
