@@ -111,14 +111,8 @@ Remember that Spotify's own terms are unclear but ATM said to be
 - Have some discussion about possible merging of spotify-make into current spec.
 
 ### Mageia
- Current version installs OK but aborts when started:
-```
-Qt: Session management error: Could not open network socket
-Cannot mix incompatible Qt library (version 0x40802) with
-this library (version 0x40801)
-/home/al/bin/spotify: line 31:  5596 Aborted
-```
-There doesn't seem to be any easy way to downgrade the Qt stuff, so this is left as-is ATM.
+Package bundles libqtdbus4-4.8.1 required by spotify; system version is
+4.8.2
 
 ## References
 

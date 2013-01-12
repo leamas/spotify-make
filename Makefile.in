@@ -33,6 +33,9 @@ SOURCES      += $(wildcard fedora/$(arch)/*.so.*)
 else ifeq ($(dist),Ubuntu)
 SOURCES      += $(wildcard ubuntu/$(arch)/*.so.*)
 DOCS         += $(wildcard ubuntu/$(arch)/*)
+else ifeq ($(dist),Mageia)
+SOURCES      += $(wildcard mageia2/$(arch)/*.so.*)
+DOCS         += $(wildcard mageia2/doc/*)
 endif
 
 lib_to_data   := $(shell python -c 'import os.path;                          \
@@ -80,6 +83,9 @@ else ifeq ($(dist),Ubuntu)
 bundled:  check_sources unpack
 	cp -a ubuntu/$(arch)/libssl.so.0.9.8 $(DESTDIR)$(app_libdir)
 	cp -a ubuntu/$(arch)/libcrypto.so.0.9.8 $(DESTDIR)$(app_libdir)
+else ifeq ($(dist),Mageia)
+bundled:  check_sources unpack
+	cp -a mageia2/$(arch)/libQtDBus.so.4.8.1 $(DESTDIR)$(app_libdir)
 else
 bundled:  check_sources unpack
 endif
