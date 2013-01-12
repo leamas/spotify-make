@@ -82,8 +82,8 @@ if [  -z "$package" ]; then
     echo $sts
 fi
 
-echo -n "    zenity: "
-sts="$(zenity --version | sed 's/$/ (ok)/' || \
+echo -n "    zenity: ..."
+sts="$(which zenity &>/dev/null && echo '   (ok)' || \
          echo 'WARNING: Not found (make will run, but not spotify)')"
 echo $sts
 
