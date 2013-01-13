@@ -127,11 +127,15 @@ desktop:  unpack check_sources
 	src_icons="$(DESTDIR)$(app_datadir)/Icons";                      \
 	echo "Installing icons in $$icondir";                            \
 	for size in 24 32 48 64 128 256; do                              \
-	    install -pD  $$src_icons/spotify-linux-$$size.png            \
+	    install -m 644 -pD  $$src_icons/spotify-linux-$$size.png     \
 	        $$icondir/$${size}x$${size}/apps/spotify-client.png;     \
 	done
-	desktop-file-install --dir  $(DESTDIR)$(datadir)/applications    \
-	   spotify.desktop
+	[ -d $(DESTDIR)$(datadir)/applications ] ||                      \
+	    mkdir  $(DESTDIR)$(datadir)/applications
+	desktop-file-install --dir $(DESTDIR)$(datadir)/applications     \
+	    spotify.desktop
+	[ "$(dist)" = 'Ubuntu' ] && chmod 755                            \
+	    $(DESTDIR)$(datadir)/applications/spotify.desktop  || :
 
 addons: check_sources
 	@#  Manpage and wrapper script
