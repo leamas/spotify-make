@@ -80,8 +80,8 @@ if [[ "$sts" == ERROR* ]]; then
     export PATH="$PATH:/sbin:/usr/sbin"
     if ldconfig --version &> /dev/null; then
         export PATH="$PATH:/sbin:/usr/sbin"
-	echo -n "INFO: ldconfig(8) not found using PATH=$PATH. "
-	echo -e "\nINFO: Trying adding '/sbin:/usr/sbin'"
+	echo  "INFO: ldconfig(8) not found default PATH. "
+	echo  "INFO: Trying adding '/sbin:/usr/sbin'"
         sts="$(ldconfig --version | head -1 | sed 's/$/ (ok)/' || \
                  echo 'ERROR: Not found')"
     else
@@ -107,24 +107,28 @@ sts="$(which zenity &>/dev/null && echo '   (ok)' || \
 echo $sts
 
 echo -n "    ar: "
-sts="$(ar --version | head -1| sed 's/$/ (ok)/' || \
-         echo 'ERROR: Not found (in binutils package?)')"
+sts="$(ar --version &>/dev/null && \
+          ar --version | head -1| sed 's/$/ (ok)/' || \
+              echo 'ERROR: Not found (in binutils package?)')"
 echo $sts
 
 echo -n "    lsb_release: "
-sts="trying -i: $(lsb_release -i 2>&1 | sed 's/$/ (ok)/' || \
-         echo 'ERROR: Not found')"
+sts="trying -i: $(lsb_release -i &>/dev/null && \
+                      lsb_release -i 2>&1 | sed 's/$/ (ok)/' || \
+                          echo 'ERROR: Not found')"
 echo $sts
 
 echo -n "    make: "
-sts="$(make --version 2>&1  | head -1 | sed 's/$/ (ok)/' || \
-    echo 'ERROR: Not found')"
+sts="$(make --version &>/dev/null && \
+           make --version 2>&1  | head -1 | sed 's/$/ (ok)/' || \
+               echo 'ERROR: Not found')"
 [[ $sts = *GNU* ]] || sts="ERROR: make is not GNU make."
 echo $sts
 
 echo -n "    install: "
-sts="$(install --version | head -1 | sed s'/$/ (ok)/'  || \
-    echo 'ERROR: not found' )"
+sts="$(install --version &>/dev/null && \
+           install --version | head -1 | sed s'/$/ (ok)/'  || \
+               echo 'ERROR: not found' )"
 [[ "$sts" == ERROR* ]] || {
     install -pD configure foo/bar
     [[ -d foo && -f foo/bar ]] && rm -rf foo \
@@ -142,7 +146,6 @@ echo -n "    gtk-update-icon-cache: "
 sts="$(gtk-update-icon-cache -h &>/dev/null && echo ' (ok)' || \
     echo 'WARNING: Not found (make will run, but less than perfect)')"
 echo $sts
-
 
 
 echo -n "Determining distro:... "
