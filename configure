@@ -72,6 +72,25 @@ while [ "$1" != "" ]; do
 done
 
 echo "Checking build and support dependencies"
+
+sts="$(ldconfig --version  &>/dev/null && \
+           ldconfig --version  | head -1 | sed 's/$/ (ok)/' || \
+               echo 'ERROR: Not found')"
+if [[ "$sts" == ERROR* ]]; then
+    export PATH="$PATH:/sbin:/usr/sbin"
+    if ldconfig --version &> /dev/null; then
+        export PATH="$PATH:/sbin:/usr/sbin"
+	echo -n "INFO: ldconfig(8) not found using PATH=$PATH. "
+	echo -e "\nINFO: Trying adding '/sbin:/usr/sbin'"
+        sts="$(ldconfig --version | head -1 | sed 's/$/ (ok)/' || \
+                 echo 'ERROR: Not found')"
+    else
+        echo "Cannot find ldconfig(8), please install it. Giving up." >&2
+        exit 2
+    fi
+fi
+echo "    ldconfig:... $sts"
+
 echo -n "    python: "
 sts="$(python --version 2>&1) (ok)" || sts="ERROR: Not found"
 echo $sts
@@ -85,11 +104,6 @@ fi
 echo -n "    zenity: ..."
 sts="$(which zenity &>/dev/null && echo '   (ok)' || \
          echo 'WARNING: Not found (make will run, but not spotify)')"
-echo $sts
-
-echo -n "    ldconfig: "
-sts="$(ldconfig --version | head -1 | sed 's/$/ (ok)/' || \
-         echo 'ERROR: Not found')"
 echo $sts
 
 echo -n "    ar: "
@@ -181,6 +195,7 @@ echo $so_perms
 rm -f spotify.dir
 
 echo "Configuration paths:"
+echo "      PATH:  $PATH"
 echo "    prefix:  $prefix"
 echo "    bindir:  $bindir"
 echo "    libdir:  $libdir"
@@ -199,6 +214,7 @@ sed -e  "s|@prefix@|$prefix|" \
     -e  "s|@dist@|$dist|" \
     -e  "s|@archive@|$package|" \
     -e  "s|@so_perms@|$so_perms|" \
+    -e  "s|@path@|$PATH|" \
 < Makefile.in > Makefile
 
 echo "Writing spotify.desktop"

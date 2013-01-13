@@ -9,6 +9,7 @@ Plain 'make' doesn't do anything. Targets: \n\
    - register:   Notify system about new desktop icons etc. \n\
    - uninstall:  Remove everything installed.
 
+PATH          = @path@
 dist          = @dist@
 arch          = @arch@
 archlib       = @archlib@
