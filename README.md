@@ -35,6 +35,7 @@ as required:
     $ make download
     $ make install
     $ make register
+    $ ~/bin/my-spotify
 ```
 Installing in system directories e. g., installing in /opt/local/lib and
 /opt/local/share with a binary in /usr/bin. (yes, bad example, I know):
@@ -43,6 +44,7 @@ Installing in system directories e. g., installing in /opt/local/lib and
     $ make download
     # make install
     # make register
+    $ spotify
 ```
 Installing in a temporary dir e. g. in a packaging context with all
 sources already in place and the % substitutions available. The
@@ -78,12 +80,13 @@ Unresolved runtime dependencies in spotify is reported as WARNING: lines.
 
 User installs have some caveats:
 
-- The binary is by default in ~/bin. Your PATH must include this; this
-  is a default setup on many (most?) distributions. Change with
-  --bindir= to configure
+- The binary is called my-spotify, to allow parallel install with a
+  system-wide 'spotify' installation.
+- The binary is by default installed in ~/bin.
 - The desktop file  and icons are installed under ~/.local/share. This is
-  according to opendesktop specs, and most tools will find them there. Perhaps
-  not all, though. Change with --datadir= to ./configure.
+  according to opendesktop specs, and most tools will find them there.
+- Some systems (notably Ubunt/unity) requires a logout-login sequence to
+  pickup the installation in the menus.
 - Manpage goes to ~/.local/share/man/man1. Your MANPATH will probably need
   an update to include  $HOME/.local/share/man. Change dir with --mandir=
   to ./configure. Manpage isn't that useful anyway.

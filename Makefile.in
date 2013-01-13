@@ -13,6 +13,7 @@ PATH          = @path@
 dist          = @dist@
 arch          = @arch@
 archlib       = @archlib@
+binary        = @binary@
 repo          = http://repository.spotify.com/pool/non-free/s/spotify
 version       = @version@
 archive       = @archive@
@@ -134,8 +135,8 @@ desktop:  unpack check_sources
 
 addons: check_sources
 	@#  Manpage and wrapper script
-	install -m 755 -pD spotify.bash $(DESTDIR)$(bindir)/spotify
-	install -m 644 -pD spotify.1  $(DESTDIR)$(mandir)/man1/spotify.1
+	install -m 755 -pD spotify.bash $(DESTDIR)$(bindir)/$(binary)
+	install -m 644 -pD spotify.1 $(DESTDIR)$(mandir)/man1/$(binary).1
 
 install: applinks syslinks unpack addons bundled desktop set_so_perms
 	cp Makefile $(DESTDIR)$(app_datadir)

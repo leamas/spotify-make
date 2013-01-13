@@ -12,6 +12,7 @@ function on_prefix_change()
     mandir=$datadir/man
 }
 
+binary='spotify'
 prefix='/usr/local'
 on_prefix_change
 
@@ -64,6 +65,7 @@ while [ "$1" != "" ]; do
             prefix=$HOME/.local
             on_prefix_change
             bindir=$HOME/bin
+	    binary='my-spotify'
 	    ;;
         *) usage
 	    ;;
@@ -217,12 +219,16 @@ sed -e  "s|@prefix@|$prefix|" \
     -e  "s|@dist@|$dist|" \
     -e  "s|@archive@|$package|" \
     -e  "s|@so_perms@|$so_perms|" \
+    -e  "s|@binary@|$binary|" \
     -e  "s|@path@|$PATH|" \
 < Makefile.in > Makefile
 
 echo "Writing spotify.desktop"
-sed  "/Exec=/s|=.*|=$bindir/spotify %U|"  \
+sed  "/Exec=/s|=.*|=$bindir/$binary %U|"  \
     < spotify.desktop.in > spotify.desktop
+if [[ "$binary" = my* ]]; then
+    sed -i '/^Name/s/=.*/=My Spotify/' spotify.desktop
+fi
 
 echo "Writing spotify.bash"
 sed  -e "/spotify=/s|=.*|=$libdir/spotify-client/spotify|" \
