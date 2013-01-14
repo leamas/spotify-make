@@ -224,8 +224,7 @@ sed -e  "s|@prefix@|$prefix|" \
 < Makefile.in > Makefile
 
 echo "Writing spotify.desktop"
-sed  -e "/^Exec=/s|=.*|=$bindir/$binary %U|"  \
-     -e "/^TryExec=/s|=.*|=$bindir/$binary |"  \
+sed  -e "/^Exec=/s|=.*|=/bin/bash $bindir/$binary %U|"  \
     < spotify.desktop.in > spotify.desktop
 if [[ "$binary" = my* ]]; then
     sed -i '/^Name/s/=.*/=My Spotify/' spotify.desktop

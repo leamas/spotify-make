@@ -124,3 +124,7 @@ Package bundles libqtdbus4-4.8.1 required by spotify; system version is
 [2] https://help.ubuntu.com/community/SwitchingToUbuntu/FromLinux/RedHatEnterpriseLinuxAndFedora
 
 [3] https://wiki.archlinux.org/index.php/Pacman_Rosetta
+
+[4] https://bugs.launchpad.net/ubuntu/+source/desktop-file-utils/+bug/592671
+
+{5] https://bugs.launchpad.net/ubuntu/+source/meta-gnome2/+bug/572918
