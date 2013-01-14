@@ -100,9 +100,10 @@ Remember that Spotify's own terms are unclear but ATM said to be
 ## System notes
 
 ### Ubuntu
-- Works occasionally. 32 and 64-bits minimally tested.
+- Works occasionally. 12.10 32- and 64-bits minimally tested.
 - Bundles the correct Debian libssl0.9.8.0.9.8o-4squeeze13.
-- Desktop does not pick up the newly installed package until after logout-login.
+- Desktop (unity) does not pick up the newly installed package until
+  after logout-login.
 
 ### Fedora
 - Solves the libssl0.9.8 problem by bundling.
@@ -112,10 +113,14 @@ Remember that Spotify's own terms are unclear but ATM said to be
 - Current spec actually Conflicts libssl0.9.8, linking to 1.0.0 seems
   to work OK.
 - Have some discussion about possible merging of spotify-make into current spec.
+- 32-bit release 12 minimally tested.
 
 ### Mageia
 Package bundles libqtdbus4-4.8.1 required by spotify; system version is
 4.8.2
+
+### Linux Mint
+Handled the same way as Ubuntu. Version 14 32-bit minimally tested.
 
 ## References
 
