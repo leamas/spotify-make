@@ -81,7 +81,6 @@ sts="$(ldconfig --version  &>/dev/null && \
 if [[ "$sts" == ERROR* ]]; then
     export PATH="$PATH:/sbin:/usr/sbin"
     if ldconfig --version &> /dev/null; then
-        export PATH="$PATH:/sbin:/usr/sbin"
 	echo  "INFO: ldconfig(8) not found default PATH. "
 	echo  "INFO: Trying adding '/sbin:/usr/sbin'"
         sts="$(ldconfig --version | head -1 | sed 's/$/ (ok)/' || \

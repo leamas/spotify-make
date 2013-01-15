@@ -77,21 +77,17 @@ set_so_perms: unpack
 	chmod $(so_perms) \
 	    $$( find $(DESTDIR)$(app_libdir) -name '*.so*' -writable)
 
+bundled:  check_sources unpack
+	[ -n "$(DOCS)" ] && cp -a $(DOCS) $(DESTDIR)$(app_datadir) || :
 ifeq ($(dist),Fedora)
-bundled:  check_sources unpack
-	cp fedora/$(arch)/libssl.so.0.9.8 $(DESTDIR)$(app_libdir)
-	cp fedora/$(arch)/libcrypto.so.0.9.8 $(DESTDIR)$(app_libdir)
+	cp -a fedora/$(arch)/libssl.so.0.9.8 $(DESTDIR)$(app_libdir)
+	cp -a fedora/$(arch)/libcrypto.so.0.9.8 $(DESTDIR)$(app_libdir)
 else ifeq ($(dist),Ubuntu)
-bundled:  check_sources unpack
 	cp -a ubuntu/$(arch)/libssl.so.0.9.8 $(DESTDIR)$(app_libdir)
 	cp -a ubuntu/$(arch)/libcrypto.so.0.9.8 $(DESTDIR)$(app_libdir)
 else ifeq ($(dist),Mageia)
-bundled:  check_sources unpack
 	cp -a mageia2/$(arch)/libQtDBus.so.4.8.1 $(DESTDIR)$(app_libdir)
-else
-bundled:  check_sources unpack
 endif
-	[ -n "$(DOCS)" ] && cp -a $(DOCS) $(DESTDIR)$(app_datadir) || :
 
 applinks: unpack
 	@# Add links to datadir in libdir (where things are searched for).
@@ -177,6 +173,3 @@ clean:
 	rm -rf $(archive) spotify.bash spotify.1  opt usr
 	rm -rf control.tar.gz data.tar.gz *.deb debian-binary github
 	rm -f spotify.desktop Makefile
-
-support.tar.gz:
-	tar cf support.tar.gz spotify.1 spotify.bash spotify.desktop
