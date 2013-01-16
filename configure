@@ -123,7 +123,8 @@ echo -n "    make: "
 sts="$(make --version &>/dev/null && \
            make --version 2>&1  | head -1 | sed 's/$/ (ok)/' || \
                echo 'ERROR: Not found')"
-[[ $sts = *GNU* ]] || sts="ERROR: make is not GNU make."
+[[ "$sts" = ERROR* ]] || \
+    [[ $sts = *GNU* ]] || sts="ERROR: make is not GNU make."
 echo $sts
 
 echo -n "    install: "
