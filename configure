@@ -141,14 +141,18 @@ echo $sts
 
 echo -n "    desktop-file-validate: "
 sts="$(desktop-file-validate -h &>/dev/null && echo ' (ok)' || \
-     echo 'WARNING: Not found (make will run, but less than perfect)')"
+    echo 'WARNING: Not found (make install will run, but not make register)')"
 echo $sts
 
 echo -n "    gtk-update-icon-cache: "
 sts="$(gtk-update-icon-cache -h &>/dev/null && echo ' (ok)' || \
-    echo 'WARNING: Not found (make will run, but less than perfect)')"
+    echo 'WARNING: Not found (make install will run, but not make register)')"
 echo $sts
 
+echo -n "    update-desktop-database: "
+sts="$(update-desktop-database -h &>/dev/null && echo ' (ok)' || \
+    echo 'WARNING: Not found (make install will run, but not make register)')"
+echo $sts
 
 echo -n "Determining distro:... "
 dist=$(lsb_release -i || echo "Unknown")

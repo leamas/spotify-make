@@ -160,6 +160,7 @@ register:
 	    $(DESTDIR)$(datadir)/icons/hicolor
 	-desktop-file-validate \
 	    $(DESTDIR)$(datadir)/applications/spotify.desktop
+	-update-desktop-database  $(DESTDIR)$(datadir)/applications
 
 uninstall:
 	rm -rf $(DESTDIR)$(app_datadir)
