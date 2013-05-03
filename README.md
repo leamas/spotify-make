@@ -8,6 +8,10 @@ three usecases:
   - System-wide FHS-compliant installs in e. g., /usr/local or /usr.
   - Temporary installs used in a packaging context.
 
+## News
+ 
+2013-05-03: Updated to upstream 0.9.0.133 release.
+
 ## Installation
 
 Either use git:
