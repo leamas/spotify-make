@@ -24,12 +24,11 @@ cat /proc/cpuinfo | grep -q 'sse2' || {
     exit 1
 }
 
-# Fedora requires user to be in audio group:
-if [ -f "/etc/fedora-release" ]; then
-    id -Gn | grep -q 'audio' || {
-        zenity --warning \
-            --text "You are not member of audio group, problems ahead"
-    }
-fi
+# Check that we have write access to /dev/snd/*
+snd_sample=$( find /dev/snd -type c | head -1 )
+[ -w "$snd_sample" ] || {
+    txt="You havn't write access to $snd_sample, problems ahead."
+    zenity --warning  --text "$txt"
+}
 
 $spotify $@
