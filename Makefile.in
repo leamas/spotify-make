@@ -154,7 +154,8 @@ install: applinks syslinks unpack addons bundled desktop set_so_perms
 
 
 check-deps:
-	@deps=$$( ldd $(DESTDIR)$(app_libdir)/spotify | grep 'not.*found' ); \
+	@deps=$$( ldd $(DESTDIR)$(app_libdir)/spotify-bin        \
+	              | grep 'not.*found' );                     \
 	if [ -z "$$deps" ]; then                                 \
 	    echo "OK";                                           \
 	    exit 0;                                              \
