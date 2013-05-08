@@ -157,10 +157,16 @@ echo $sts
 echo -n "Determining distro:... "
 dist=$(lsb_release -i || echo "Unknown")
 dist=$( echo ${dist##*:} )
-if [ "$dist" = 'LinuxMint' ]; then
-    echo -n '(LinuxMint handled as)... '
-   dist='Ubuntu'
-fi
+case "$dist" in
+    Ubuntu)
+        echo -n '(LinuxMint handled as)... '
+        dist='Ubuntu'
+        ;;
+    CentOS|RedHatEnterpriseServer)
+        echo -n "($dist handled as RHEL)..."
+        dist='RHEL'
+        ;;
+esac
 echo $dist
 
 if [ -z "$package" ]; then

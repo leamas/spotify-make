@@ -38,6 +38,9 @@ DOCS         += $(wildcard ubuntu/$(arch)/*)
 else ifeq ($(dist),Mageia)
 SOURCES      += $(wildcard mageia2/$(arch)/*.so.*)
 DOCS         += $(wildcard mageia2/doc/*)
+else ifeq ($(dist),RHEL)
+SOURCES      += $(wildcard rhel/$(arch)/*)
+DOCS         += $(wildcard rhel/doc/*)
 endif
 
 lib_to_data   := $(shell python -c 'import os.path;                          \
@@ -87,6 +90,8 @@ else ifeq ($(dist),Ubuntu)
 	cp -a ubuntu/$(arch)/libcrypto.so.0.9.8 $(DESTDIR)$(app_libdir)
 else ifeq ($(dist),Mageia)
 	cp -a mageia2/$(arch)/libQtDBus.so.4.8.1 $(DESTDIR)$(app_libdir)
+else ifeq ($(dist),RHEL)
+	cp -ra rhel/$(arch)/* $(DESTDIR)$(app_libdir)
 endif
 
 applinks: unpack
