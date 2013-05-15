@@ -162,6 +162,12 @@ case "$dist" in
         echo -n '(LinuxMint handled as)... '
         dist='Ubuntu'
         ;;
+    Debian)
+        if [[ "$( lsb_release -r)" == *7.0 ]]; then
+            echo -n '(Debian 7.0 Wheeze handled as)...'
+            dist='Ubuntu'
+        fi
+        ;;
     CentOS|RedHatEnterpriseServer)
         echo -n "($dist handled as RHEL)..."
         dist='RHEL'
