@@ -187,7 +187,9 @@ fi
 echo $version
 
 echo -n "Determining arch:... "
-if [ $(uname -i) = 'x86_64' ]; then
+uname_arch=$(uname -i)
+[ "$uname_arch" = 'unknown' ] && uname_arch=$(uname -m)
+if [ "$uname_arch" = 'x86_64' ]; then
     arch="amd64"
     archlib='^[ ]*/.*64.*/.+'
 else
