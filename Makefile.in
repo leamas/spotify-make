@@ -43,9 +43,9 @@ SOURCES      += $(wildcard rhel/$(arch)/*)
 DOCS         += $(wildcard rhel/doc/*)
 endif
 
-lib_to_data   := $(shell python -c 'import os.path;                          \
-                                    print os.path.relpath("$(app_datadir)",  \
-                                                          "$(app_libdir)")')
+lib_to_data  := $(shell python -c 'import os.path;                          \
+                                   print os.path.relpath("$(app_datadir)",  \
+                                                         "$(app_libdir)")')
 
 all: help
 
