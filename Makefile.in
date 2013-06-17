@@ -43,9 +43,10 @@ SOURCES      += $(wildcard rhel/$(arch)/*)
 DOCS         += $(wildcard rhel/doc/*)
 endif
 
-lib_to_data   := $(shell python -c 'import os.path;                          \
-                                    print os.path.relpath("$(app_datadir)",  \
-                                                          "$(app_libdir)")')
+lib_to_data  := $(shell python -c 'import os.path;                          \
+                                   print os.path.relpath("$(app_datadir)",  \
+                                                         "$(app_libdir)")')
+quiet         = $(shell test -t 0 || echo '-q')
 
 all: help
 
@@ -62,7 +63,7 @@ check_sources:
 	}
 
 $(archive):
-	wget -Nq -O $@ $(repo)/$@
+	wget -N $(quiet) -O $@ $(repo)/$@
 
 unpack: check_sources
 	@# Unpack into libdir (arched files) and datadir(noarch).
