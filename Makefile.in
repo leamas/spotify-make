@@ -62,7 +62,7 @@ check_sources:
 	}
 
 $(archive):
-	wget -q -O $@ $(repo)/$@
+	wget -Nq -O $@ $(repo)/$@
 
 unpack: check_sources
 	@# Unpack into libdir (arched files) and datadir(noarch).
