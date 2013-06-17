@@ -179,7 +179,10 @@ if [ -z "$package" ]; then
     echo -n "Determining version:... "
     wget -qO spotify.dir http://repository.spotify.com/pool/non-free/s/spotify
     version=$(grep 'spotify-client_.*amd64.deb' spotify.dir \
-                  | sed 's/.*spotify-client_\([^-]*\).*/\1/')
+                  | sed 's/.*spotify-client_\([^-]*\).*/\1/' \
+                  | sed -r 's/[ ]+/\n/g' \
+                  | sort | tail -1 )
+
 else
     version=$( echo $package | sed 's/.*spotify-client_\([^-]*\).*/\1/' )
     echo -n "Digging out version from --file:..."
@@ -201,6 +204,7 @@ echo $arch
 if [ -z "$package" ]; then
     echo -n "Determine .deb file..."
     package=$(grep "spotify-client.*$arch.deb" spotify.dir \
+                  | grep "$version" \
                   | sed 's/.*\(spotify-client.*deb\).*/\1/')
 else
     echo -n "Using supplied package:..."
