@@ -53,7 +53,14 @@ help:
 	@echo -e "\n$(help_msg)\n"
 
 download: $(archive)
-	@# Download all sources
+	@# Download all platform sources
+
+download-all: download
+	@# Download all architectures.
+	tarball=$(archive); \
+	[[ $$tarball = *386* ]] && \
+	    other=$${tarball/i386/amd64} || other=$${tarball/amd64/i386}; \
+	wget -Nq -O  $$other $(repo)/$$other
 
 check_sources:
 	@test -f $(archive) || {                                    \
