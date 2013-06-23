@@ -60,7 +60,7 @@ download-all: download
 	tarball=$(archive); \
 	[[ $$tarball = *386* ]] && \
 	    other=$${tarball/i386/amd64} || other=$${tarball/amd64/i386}; \
-	wget -Nq -O  $$other $(repo)/$$other
+	wget -Nq $(repo)/$$other
 
 check_sources:
 	@test -f $(archive) || {                                    \
