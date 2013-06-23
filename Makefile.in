@@ -130,15 +130,6 @@ syslinks: unpack bundled
 	    fi                                                           \
 	done || :
 
-fix-resource-path: unpack
-	@# Occasionally, spotify tries to load resources.zip from the
-	@# $ORIGIN/spotify/resources.zip. Fix by symlinking.
-	cd  $(DESTDIR)$(app_libdir); \
-	    mv spotify spotify-bin; \
-	    ln -s . spotify
-	sed -i spotify.bash -e '/^spotify=/s/spotify$$/spotify-bin/'
-
-
 desktop:  unpack check_sources
 	@# Install icons, desktop file etc.
 	@icondir="$(DESTDIR)$(datadir)/icons/hicolor";                   \
@@ -155,7 +146,7 @@ desktop:  unpack check_sources
 	[ "$(dist)" = 'Ubuntu' ] && chmod 755                            \
 	    $(DESTDIR)$(datadir)/applications/spotify.desktop  || :
 
-addons: check_sources fix-resource-path
+addons: check_sources
 	@#  Manpage and wrapper script
 	install -m 755 -pD spotify.bash $(DESTDIR)$(bindir)/$(binary)
 	install -m 644 -pD spotify.1 $(DESTDIR)$(mandir)/man1/$(binary).1
