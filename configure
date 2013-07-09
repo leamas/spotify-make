@@ -163,10 +163,12 @@ case "$dist" in
         dist='Ubuntu'
         ;;
     Debian)
-        if [[ "$( lsb_release -r)" == *7.0 ||
-                "$( lsb_release -r)" == *'unstable' ]]; then
+        if [[ "$( lsb_release -r)" == *7.0 ]]; then
             echo -n '(Debian 7.0 Wheeze handled as)...'
             dist='Ubuntu'
+        elif [[ "$( lsb_release -r)" == *'unstable' ]]; then
+			echo -n '(Debian unstable handled as)...'
+			dist='Ubuntu'
         fi
         ;;
     CentOS|RedHatEnterpriseServer)
