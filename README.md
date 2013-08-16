@@ -9,7 +9,7 @@ three usecases:
   - Temporary installs used in a packaging context.
 
 ## News
- 
+
 2013-05-03: Updated to upstream 0.9.0.133 release.
 
 ## Installation
@@ -119,6 +119,7 @@ Remember that Spotify's own terms are unclear but ATM said to be
 
 ### Ubuntu
 - Works occasionally. 12.10 32- and 64-bits minimally tested.
+  13.10 success stories reported.
 - Bundles the correct Debian libssl0.9.8.0.9.8o-4squeeze13.
 - Desktop (unity) does not pick up the newly installed package until
   after logout-login.
@@ -130,19 +131,26 @@ Remember that Spotify's own terms are unclear but ATM said to be
 ### SUSE
 - Current spec actually Conflicts libssl0.9.8, linking to 1.0.0 seems
   to work OK.
-- Have some discussion about possible merging of spotify-make into current spec.
+- Have some discussion about possible merging of spotify-make into current spec
+  and installer, a fork is available [7].
 - 32-bit release 12.2 and upcoming 12.3 (Factory) minimally tested.
 
 ### Mageia
 Minimally tested on version 2, 32-bit desktop release. Package bundles
 libqtdbus4-4.8.1 required by spotify; system version is 4.8.2
 
+## Debian
+- Success stories reported for Wheezy 7.0, bug fixed for 7.1 (issue #13)
+
+## CentOS
+- Partial success story on CentOS 6.4 in [6]
+
 ### Linux Mint
 Handled the same way as Ubuntu. Version 14 32-bit minimally tested.
 
 ## References
 
-[1] http://community.spotify.com/t5/Desktop-Linux/bd-p/spotifylinux
+[1] http://community.spotify.com/t5/Help-Desktop-Linux-Mac-and/bd-p/001
 
 [2] https://help.ubuntu.com/community/SwitchingToUbuntu/FromLinux/RedHatEnterpriseLinuxAndFedora
 
@@ -151,3 +159,7 @@ Handled the same way as Ubuntu. Version 14 32-bit minimally tested.
 [4] https://bugs.launchpad.net/ubuntu/+source/desktop-file-utils/+bug/592671
 
 [5] https://bugs.launchpad.net/ubuntu/+source/meta-gnome2/+bug/572918
+
+[6] http://community.spotify.com/t5/Help-Desktop-Linux-Mac-and/Linux-Installer-script-Ubuntu-SUSE-Mageia-Mint/m-p/240886/highlight/true#M8789
+
+[7] https://github.com/leamas/opensuse-spotify-installer
