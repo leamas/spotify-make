@@ -117,6 +117,7 @@ syslinks: unpack bundled
 	    case $$dep in                                                \
 	        libssl*)     hostlink='libssl.so.1.*0.*' ;;              \
 	        libcrypto*)  hostlink='libcrypto.so.1.*0.*' ;;           \
+	        libudev*)    hostlink='libudev.so.1.*.*' ;;              \
 	        *)           hostlink="$${dep%%.*}" ;;                   \
 	    esac;                                                        \
 	    hostlink=$$( ldconfig -p | grep $$hostlink | sed 's/.*=>//'  \
