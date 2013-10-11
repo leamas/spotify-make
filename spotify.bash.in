@@ -31,4 +31,4 @@ snd_sample=$( find /dev/snd -type c | head -1 )
     zenity --warning  --text "$txt"
 }
 
-$spotify $@
+LD_LIBRARY_PATH=$( dirname $spotify ) $spotify $@
