@@ -90,8 +90,7 @@ set_so_perms: unpack
 bundled:  check_sources unpack
 	[ -n "$(DOCS)" ] && cp -a $(DOCS) $(DESTDIR)$(app_datadir) || :
 ifeq ($(dist),Fedora)
-	cp -a fedora/$(arch)/libssl.so.0.9.8 $(DESTDIR)$(app_libdir)
-	cp -a fedora/$(arch)/libcrypto.so.0.9.8 $(DESTDIR)$(app_libdir)
+	cp -a fedora/$(arch)/*.so.* $(DESTDIR)$(app_libdir)
 else ifeq ($(dist),Ubuntu)
 	cp -a ubuntu/$(arch)/libssl.so.0.9.8 $(DESTDIR)$(app_libdir)
 	cp -a ubuntu/$(arch)/libcrypto.so.0.9.8 $(DESTDIR)$(app_libdir)
