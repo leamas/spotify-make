@@ -10,7 +10,14 @@ three usecases:
 
 ## News
 
-2013-05-03: Updated to upstream 0.9.0.133 release.
+#### 2013-10-11:
+            Updated to 0.9.4.183.g644e24e.428. New libraries for Fedora added,
+            other OS are likely to run into problems with missing libraries.
+            Please open issues for any such problems.
+
+#### 2013-05-03:
+            Updated to upstream 0.9.0.133 release.
+
 
 ## Installation
 
