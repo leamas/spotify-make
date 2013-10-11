@@ -79,7 +79,7 @@ unpack: check_sources
 	@mkdir -p $(DESTDIR)$(app_libdir)  || :
 	@mkdir -p $(DESTDIR)$(app_datadir) || :
 	cp -ar ./opt/spotify/spotify-client/*  $(DESTDIR)$(app_datadir)
-	mv $(DESTDIR)$(app_datadir)/libcef.so $(DESTDIR)$(app_libdir)
+	mv $(DESTDIR)$(app_datadir)/Data/libcef.so $(DESTDIR)$(app_libdir)
 	mv $(DESTDIR)$(app_datadir)/spotify $(DESTDIR)$(app_libdir)
 
 set_so_perms: unpack
