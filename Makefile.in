@@ -46,10 +46,6 @@ endif
 lib_to_data  := $(shell python -c 'import os.path;                          \
                                    print os.path.relpath("$(app_datadir)",  \
                                                          "$(app_libdir)")')
-data_to_lib  := $(shell python -c 'import os.path;                          \
-                                   print os.path.relpath("$(app_libdir)",  \
-                                                         "$(app_datadir)/Data")')
-
 all: help
 
 help:
@@ -79,11 +75,11 @@ unpack: check_sources
 	ar x $(archive)
 	tar xzf data.tar.gz
 	@rm -rf $(DESTDIR)$(app_libdir) $(DESTDIR)/$(app_datadir)
-	@mkdir -p $(DESTDIR)$(app_libdir)  || :
+	@mkdir -p $(DESTDIR)$(app_libdir)/Data || :
 	@mkdir -p $(DESTDIR)$(app_datadir) || :
 	cp -ar ./opt/spotify/spotify-client/*  $(DESTDIR)$(app_datadir)
 	mv $(DESTDIR)$(app_datadir)/Data/libcef.so $(DESTDIR)$(app_libdir)
-	mv $(DESTDIR)$(app_datadir)/Data/SpotifyHelper $(DESTDIR)$(app_libdir)
+	mv $(DESTDIR)$(app_datadir)/Data/SpotifyHelper $(DESTDIR)$(app_libdir)/Data
 	mv $(DESTDIR)$(app_datadir)/spotify $(DESTDIR)$(app_libdir)
 
 set_so_perms: unpack
@@ -109,8 +105,6 @@ applinks: unpack
 	cd $(DESTDIR)$(app_libdir);           \
 	ln -sf $(lib_to_data)/Data     .;     \
 	ln -sf $(lib_to_data)/licenses.xhtml .
-	cd $(DESTDIR)/$(app_datadir)/Data; \
-	ln -f $(data_to_lib)/SpotifyHelper .
 
 syslinks: unpack bundled
 	@# Match unresolved references found using ldd with system libs
