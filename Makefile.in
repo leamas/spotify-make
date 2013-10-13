@@ -46,6 +46,9 @@ endif
 lib_to_data  := $(shell python -c 'import os.path;                          \
                                    print os.path.relpath("$(app_datadir)",  \
                                                          "$(app_libdir)")')
+data_to_lib  := $(shell python -c 'import os.path;                          \
+                                   print os.path.relpath("$(app_libdir)",  \
+                                                         "$(app_datadir)/Data")')
 
 all: help
 
@@ -105,7 +108,9 @@ applinks: unpack
 	@# Add links to datadir in libdir (where things are searched for).
 	cd $(DESTDIR)$(app_libdir);           \
 	ln -sf $(lib_to_data)/Data     .;     \
-	ln -sf $(lib_to_data)/licenses.xhtml .;
+	ln -sf $(lib_to_data)/licenses.xhtml .
+	cd $(DESTDIR)/$(app_datadir)/Data; \
+	ln -f $(data_to_lib)/SpotifyHelper .
 
 syslinks: unpack bundled
 	@# Match unresolved references found using ldd with system libs
