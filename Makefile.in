@@ -183,6 +183,6 @@ uninstall:
 	rm -f  $(DESTDIR)$(datadir)/applications/spotify.desktop
 
 clean:
-	rm -rf $(archive) spotify.bash spotify.1  opt usr
+	rm -rf $(archive) spotify.bash opt usr
 	rm -rf control.tar.gz data.tar.gz *.deb debian-binary github
 	rm -f spotify.desktop Makefile
