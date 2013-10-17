@@ -11,9 +11,13 @@ three usecases:
 ## News
 
 #### 2013-10-17:
+            The directory layout problems is resolved (see bug #19).
+
+#### 2013-10-17:
             Still problems with new directory layout. Also, the git repo is
             reset, you'll have to create fresh copies of your clones.
-	    Sorry for the mess.
+            Sorry for the mess.
+
 #### 2013-10-11:
             Updated to 0.9.4.183.g644e24e.428. New libraries for Fedora added,
             ther OS are likely to run into problems with missing libraries.
@@ -154,10 +158,10 @@ Remember that Spotify's own terms are unclear but ATM said to be
 Minimally tested on version 2, 32-bit desktop release. Package bundles
 libqtdbus4-4.8.1 required by spotify; system version is 4.8.2
 
-## Debian
+### Debian
 - Success stories reported for Wheezy 7.0, bug fixed for 7.1 (issue #13)
 
-## CentOS
+### CentOS
 - Partial success story on CentOS 6.4 in [6]
 
 ### Linux Mint
