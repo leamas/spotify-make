@@ -102,9 +102,10 @@ endif
 
 applinks: unpack
 	@# Add links to datadir in libdir (where things are searched for).
-	cd $(DESTDIR)$(app_libdir);           \
-	ln -sf $(lib_to_data)/Data     .;     \
-	ln -sf $(lib_to_data)/licenses.xhtml .
+	cd $(DESTDIR)$(app_libdir)/Data; \
+	    for f in $(DESTDIR)$(app_datadir)/Data/*; do ln -s $$f . ; done
+	ln -s $(DESTDIR)$(app_datadir)/licenses.xhtml \
+	    $(DESTDIR)$(app_libdir)
 
 syslinks: unpack bundled
 	@# Match unresolved references found using ldd with system libs
