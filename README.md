@@ -22,6 +22,10 @@ three usecases:
 #### 2013-05-03:
             Updated to upstream 0.9.0.133 release.
 
+## Feedback
+
+There is a forum thread on spotify-make at
+http://community.spotify.com/t5/Help-Desktop-Linux-Mac-and/Linux-Installer-script-Ubuntu-SUSE-Mageia-Mint/m-p/240886
 
 ## Installation
 
