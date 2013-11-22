@@ -3,7 +3,7 @@ Name=Spotify
 GenericName=Music Player
 Comment=Listen to music using Spotify
 Icon=spotify-client
-Exec=/bin/bash spotify %U
+Exec=env LC_NUMERIC=en_US.utf8 /bin/bash spotify %U
 TryExec=/bin/bash
 Terminal=false
 Type=Application
