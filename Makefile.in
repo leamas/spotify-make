@@ -128,7 +128,7 @@ syslinks: unpack bundled
 	        *)           hostlink="$${dep%%.*}" ;;                   \
 	    esac;                                                        \
 	    hostlink=$$( ldconfig -p | grep $$hostlink | sed 's/.*=>//'  \
-	                 | egrep '$(archlib)' || :);                     \
+	                 | egrep -m1 '$(archlib)' || :);                 \
 	    if test "$$hostlink" != ''; then                             \
 	        ln -sf $$hostlink $$dep;                                 \
 	        echo INFO: "resolving $$dep as \"$$hostlink\"";          \
