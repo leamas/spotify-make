@@ -220,7 +220,7 @@ if [ $dist == "RHEL" ]; then
         exit 2;  
     fi
 
-    # Try to query the needed rpm, 
+    # Try to locate the necessary openssl-libraries, 
     echo -n "Checking for openssl098e-compatibility libraries..."
     if [[ -f $(rpm --eval %_libdir/libssl.so.0.9.8e) && 
           -f $(rpm --eval %_libdir/libcrypto.so.0.9.8e) ]] ; then 
