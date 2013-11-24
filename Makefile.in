@@ -111,19 +111,26 @@ applinks: unpack
 syslinks: unpack bundled
 	@# Match unresolved references found using ldd with system libs
 	@# in linker cache found using ldconfig -p. Create links and
-	@# report.
+	@# report. If distro is RHEL handle linkage to libssl/libcrypto
+	@# separately against openssl098e-compatibility libs.
 	@cd $(DESTDIR)$(app_libdir);                                     \
+	hostlink_libssl='libssl.so.1.*0.*';                              \
+	hostlink_libcrypto='libcrypto.so.1.*0.*';                        \
+	if [[ "$(dist)" == "RHEL" ]]; then                               \
+	  hostlink_libssl='libssl.so.6';                                 \
+	  hostlink_libcrypto='libcrypto.so.6';                           \
+	fi;                                                              \
 	for dep in $$( ldd  spotify | awk '/found$$/ {print $$1}' ); do  \
 	    case $$dep in                                                \
-	        libssl*)     hostlink='libssl.so.1.*0.*' ;;              \
-	        libcrypto*)  hostlink='libcrypto.so.1.*0.*' ;;           \
+	        libssl*)     hostlink="$$hostlink_libssl" ;;             \
+	        libcrypto*)  hostlink="$$hostlink_libcrypto" ;;          \
 	        libudev*)    hostlink='libudev.so.1.*.*' ;;              \
 	        *)           hostlink="$${dep%%.*}" ;;                   \
 	    esac;                                                        \
 	    hostlink=$$( ldconfig -p | grep $$hostlink | sed 's/.*=>//'  \
-                         | egrep '$(archlib)' || :);                     \
+	                 | egrep -m1 '$(archlib)' || :);                 \
 	    if test "$$hostlink" != ''; then                             \
-                ln -sf $$hostlink $$dep;                                 \
+	        ln -sf $$hostlink $$dep;                                 \
 	        echo INFO: "resolving $$dep as \"$$hostlink\"";          \
 	    else                                                         \
 	        echo "WARNING; cant resolve spotify dependency: $$dep" ; \
