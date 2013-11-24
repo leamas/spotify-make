@@ -171,10 +171,13 @@ case "$dist" in
 			dist='Ubuntu'
         fi
         ;;
-    CentOS|RedHatEnterpriseServer)
+    CentOS|RedHatEnterpriseServer|RedHatEnterpriseWorkstation)
         echo -n "($dist handled as RHEL)..."
         dist='RHEL'
         ;;
+    *)  
+        echo -n "(no \"special configuration\" of distro needed)..."
+        ;; 
 esac
 echo $dist
 
@@ -203,6 +206,42 @@ else
     archlib='^[ ]*/lib/|/usr/lib/'
 fi
 echo $arch
+
+# Check for openlssl-compatibility package on distros determined as RHEL, 
+if [ $dist == "RHEL" ]; then
+    rpm_arch="i686" 
+    openssl_compatrpm="openssl098e" 
+
+    if [ "$arch" != "i386" ]; then
+        rpm_arch="x86_64"
+    fi
+
+    # Just to be sure we got what we need, 
+    echo -n "Locating rpm-binary:... "
+    if command -v rpm &> /dev/null ; then 
+        sts=$(rpm --version)
+        echo "$sts (ok)"
+    else
+        echo -n >&2 "Cannot find rpm-binary. Your installation is seriously "
+        echo    >&2 "broken. Giving up."
+        exit 2;  
+    fi
+
+    # Try to query the needed rpm, 
+    echo -n "Querying the rpm-database for openssl098e-compatibility package..."
+    sts=$(rpm -q ${openssl_compatrpm}.${rpm_arch} 2>&1 || 
+          echo -n "(rpm query not ok)")
+    if [[ "$sts" =~ "rpm query not ok" ]] ; then
+        echo    >&2 " " $sts 
+        echo -n >&2 "Suggestion: Try to install package with 'sudo yum install "
+        echo -n >&2 "-y ${openssl_compatrpm}.${rpm_arch}'. Or determine why the"
+        echo -n >&2 " rpm-query ('rpm -q ${openssl_compatrpm}.${rpm_arch}') "
+        echo    >&2 "failed."
+        exit 2
+    else
+        echo "$sts (ok)"
+    fi
+fi
 
 if [ -z "$package" ]; then
     echo -n "Determine .deb file..."
