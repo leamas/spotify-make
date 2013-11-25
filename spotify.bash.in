@@ -31,4 +31,6 @@ snd_sample=$( find /dev/snd -type c | head -1 )
     zenity --warning  --text "$txt"
 }
 
-LD_LIBRARY_PATH=$( dirname $spotify ) $spotify $@
+# LC_NUMERIC=en_US.utf8 is required since the Discover panel is otherwise not working properly
+# as recorded at http://community.spotify.com/t5/Help-Desktop-Linux-Mac-and/Discover-page-and-radio-page-not-working-on-Linux-on-my-desktop/m-p/503548#M57375
+LD_LIBRARY_PATH=$( dirname $spotify ) LC_NUMERIC=en_US.utf8 $spotify $@
