@@ -1,6 +1,7 @@
 # Makefile is generated from Makefile.in by configure
 # Don't edit Makefile, your changes will be lost.
 
+SHELL        := /bin/bash
 
 help_msg      = \
 Plain 'make' doesn't do anything. Targets: \n\
