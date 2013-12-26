@@ -29,7 +29,7 @@ Usage: configure [options]
 --user         Configure for personal install, nust be first option.
 --package=path Downloaded spotify .deb package, by default determined
                by examining the spotify download dir. Implies local
-	       operation, nothing is downloaded from spotify
+               operation, nothing is downloaded from spotify
 
 EOF
 exit 0
@@ -56,19 +56,19 @@ while [ "$1" != "" ]; do
             ;;
         --package=*)
             package=${1##*=}
-	    [ -r "$package" ] || {
-	        echo "Cannot open package file" >&2
-		exit 2
+            [ -r "$package" ] || {
+                echo "Cannot open package file" >&2
+                exit 2
             }
             ;;
         --user)
             prefix=$HOME/.local
             on_prefix_change
             bindir=$HOME/bin
-	    binary='my-spotify'
-	    ;;
+            binary='my-spotify'
+            ;;
         *) usage
-	    ;;
+            ;;
     esac
     shift
 done
@@ -81,8 +81,8 @@ sts="$(ldconfig --version  &>/dev/null && \
 if [[ "$sts" == ERROR* ]]; then
     export PATH="$PATH:/sbin:/usr/sbin"
     if ldconfig --version &> /dev/null; then
-	echo  "INFO: ldconfig(8) not found default PATH. "
-	echo  "INFO: Trying adding '/sbin:/usr/sbin'"
+        echo  "INFO: ldconfig(8) not found default PATH. "
+        echo  "INFO: Trying adding '/sbin:/usr/sbin'"
         sts="$(ldconfig --version | head -1 | sed 's/$/ (ok)/' || \
                  echo 'ERROR: Not found')"
     else
@@ -167,17 +167,17 @@ case "$dist" in
             echo -n '(Debian 7.0 Wheeze handled as)...'
             dist='Ubuntu'
         elif [[ "$( lsb_release -r)" == *'unstable' ]]; then
-			echo -n '(Debian unstable handled as)...'
-			dist='Ubuntu'
+                        echo -n '(Debian unstable handled as)...'
+                        dist='Ubuntu'
         fi
         ;;
     CentOS|RedHatEnterpriseServer|RedHatEnterpriseWorkstation)
         echo -n "($dist handled as RHEL)..."
         dist='RHEL'
         ;;
-    *)  
+    *)
         echo -n "(no \"special configuration\" of distro needed)..."
-        ;; 
+        ;;
 esac
 echo $dist
 
@@ -207,28 +207,28 @@ else
 fi
 echo $arch
 
-# Check for openlssl-compatibility package on distros determined as RHEL, 
+# Check for openlssl-compatibility package on distros determined as RHEL,
 if [ $dist == "RHEL" ]; then
-    # Just to be sure we got what we need, 
+    # Just to be sure we got what we need,
     echo -n "Locating rpm-binary:... "
-    if command -v rpm &> /dev/null ; then 
+    if command -v rpm &> /dev/null ; then
         sts=$(rpm --version)
         echo "$sts (ok)"
     else
         echo -n >&2 "Cannot find rpm-binary. Your installation is seriously "
         echo    >&2 "broken. Giving up."
-        exit 2;  
+        exit 2;
     fi
 
-    # Try to locate the necessary openssl-libraries, 
+    # Try to locate the necessary openssl-libraries,
     echo -n "Checking for openssl098e-compatibility libraries..."
-    if [[ -f $(rpm --eval %_libdir/libssl.so.0.9.8e) && 
-          -f $(rpm --eval %_libdir/libcrypto.so.0.9.8e) ]] ; then 
+    if [[ -f $(rpm --eval %_libdir/libssl.so.0.9.8e) &&
+          -f $(rpm --eval %_libdir/libcrypto.so.0.9.8e) ]] ; then
         echo "found (ok)"
-    else 
+    else
         echo >&2 "Could not find necessary openssl098e-compatibility libraries."
         echo -n >&2 "Suggestion: Try to install package with 'sudo yum install "
-        echo >&2 "-y openssl098e'." 
+        echo >&2 "-y openssl098e'."
         exit 2
     fi
 fi
