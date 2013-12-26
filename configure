@@ -208,7 +208,7 @@ fi
 echo $arch
 
 # Check for openlssl-compatibility package on distros determined as RHEL,
-if [ $dist == "RHEL" ]; then
+if [ "$dist" = "RHEL" ]; then
     # Just to be sure we got what we need,
     echo -n "Locating rpm-binary:... "
     if command -v rpm &> /dev/null ; then
