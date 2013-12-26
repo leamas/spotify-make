@@ -29,7 +29,7 @@ Usage: configure [options]
 --user         Configure for personal install, nust be first option.
 --package=path Downloaded spotify .deb package, by default determined
                by examining the spotify download dir. Implies local
-	       operation, nothing is downloaded from spotify
+               operation, nothing is downloaded from spotify
 
 EOF
 exit 0
@@ -56,19 +56,19 @@ while [ "$1" != "" ]; do
             ;;
         --package=*)
             package=${1##*=}
-	    [ -r "$package" ] || {
-	        echo "Cannot open package file" >&2
-		exit 2
+            [ -r "$package" ] || {
+                echo "Cannot open package file" >&2
+                exit 2
             }
             ;;
         --user)
             prefix=$HOME/.local
             on_prefix_change
             bindir=$HOME/bin
-	    binary='my-spotify'
-	    ;;
+            binary='my-spotify'
+            ;;
         *) usage
-	    ;;
+            ;;
     esac
     shift
 done
@@ -81,8 +81,8 @@ sts="$(ldconfig --version  &>/dev/null && \
 if [[ "$sts" == ERROR* ]]; then
     export PATH="$PATH:/sbin:/usr/sbin"
     if ldconfig --version &> /dev/null; then
-	echo  "INFO: ldconfig(8) not found default PATH. "
-	echo  "INFO: Trying adding '/sbin:/usr/sbin'"
+        echo  "INFO: ldconfig(8) not found default PATH. "
+        echo  "INFO: Trying adding '/sbin:/usr/sbin'"
         sts="$(ldconfig --version | head -1 | sed 's/$/ (ok)/' || \
                  echo 'ERROR: Not found')"
     else
@@ -167,8 +167,8 @@ case "$dist" in
             echo -n '(Debian 7.0 Wheeze handled as)...'
             dist='Ubuntu'
         elif [[ "$( lsb_release -r)" == *'unstable' ]]; then
-			echo -n '(Debian unstable handled as)...'
-			dist='Ubuntu'
+                        echo -n '(Debian unstable handled as)...'
+                        dist='Ubuntu'
         fi
         ;;
     CentOS|RedHatEnterpriseServer|RedHatEnterpriseWorkstation)
