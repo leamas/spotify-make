@@ -175,9 +175,9 @@ case "$dist" in
         echo -n "($dist handled as RHEL)..."
         dist='RHEL'
         ;;
-    *)  
+    *)
         echo -n "(no \"special configuration\" of distro needed)..."
-        ;; 
+        ;;
 esac
 echo $dist
 
@@ -207,28 +207,28 @@ else
 fi
 echo $arch
 
-# Check for openlssl-compatibility package on distros determined as RHEL, 
+# Check for openlssl-compatibility package on distros determined as RHEL,
 if [ $dist == "RHEL" ]; then
-    # Just to be sure we got what we need, 
+    # Just to be sure we got what we need,
     echo -n "Locating rpm-binary:... "
-    if command -v rpm &> /dev/null ; then 
+    if command -v rpm &> /dev/null ; then
         sts=$(rpm --version)
         echo "$sts (ok)"
     else
         echo -n >&2 "Cannot find rpm-binary. Your installation is seriously "
         echo    >&2 "broken. Giving up."
-        exit 2;  
+        exit 2;
     fi
 
-    # Try to locate the necessary openssl-libraries, 
+    # Try to locate the necessary openssl-libraries,
     echo -n "Checking for openssl098e-compatibility libraries..."
-    if [[ -f $(rpm --eval %_libdir/libssl.so.0.9.8e) && 
-          -f $(rpm --eval %_libdir/libcrypto.so.0.9.8e) ]] ; then 
+    if [[ -f $(rpm --eval %_libdir/libssl.so.0.9.8e) &&
+          -f $(rpm --eval %_libdir/libcrypto.so.0.9.8e) ]] ; then
         echo "found (ok)"
-    else 
+    else
         echo >&2 "Could not find necessary openssl098e-compatibility libraries."
         echo -n >&2 "Suggestion: Try to install package with 'sudo yum install "
-        echo >&2 "-y openssl098e'." 
+        echo >&2 "-y openssl098e'."
         exit 2
     fi
 fi
