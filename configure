@@ -181,20 +181,6 @@ case "$dist" in
 esac
 echo $dist
 
-if [ -z "$package" ]; then
-    echo -n "Determining version:... "
-    wget -qO spotify.dir http://repository.spotify.com/pool/non-free/s/spotify
-    version=$(grep 'spotify-client_.*amd64.deb' spotify.dir \
-                  | sed 's/.*spotify-client_\([^-]*\).*/\1/' \
-                  | sed -r 's/[ ]+/\n/g' \
-                  | sort | tail -1 )
-
-else
-    version=$( echo $package | sed 's/.*spotify-client_\([^-]*\).*/\1/' )
-    echo -n "Digging out version from --file:..."
-fi
-echo $version
-
 echo -n "Determining arch:... "
 uname_arch=$(uname -i)
 [ "$uname_arch" = 'unknown' ] && uname_arch=$(uname -m)
@@ -206,6 +192,20 @@ else
     archlib='^[ ]*/lib/|/usr/lib/'
 fi
 echo $arch
+
+if [ -z "$package" ]; then
+    echo -n "Determining version:... "
+    wget -qO spotify.dir http://repository.spotify.com/pool/non-free/s/spotify
+    version=$(grep "spotify-client_.*$arch.deb" spotify.dir \
+                  | sed 's/.*spotify-client_\([^-]*\).*/\1/' \
+                  | sed -r 's/[ ]+/\n/g' \
+                  | sort | tail -1 )
+
+else
+    version=$( echo $package | sed 's/.*spotify-client_\([^-]*\).*/\1/' )
+    echo -n "Digging out version from --file:..."
+fi
+echo $version
 
 # Check for openlssl-compatibility package on distros determined as RHEL,
 if [ "$dist" = "RHEL" ]; then
