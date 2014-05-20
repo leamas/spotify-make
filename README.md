@@ -9,9 +9,14 @@ three usecases:
   - Temporary installs used in a packaging context.
 
 ## News
+#### 2014-05-20:
+            Preliminary support for 0.9.10 available in the devel branch.
+            Note that this only builds 0.9.10 for x86_64 hosts, the i386
+            code is stll at 0.9.4 - this depends on upstream which havn't
+            built a i386 version at this point. Testing and bugs appreciated!
 
 #### 2014-05-20:
-            New upstream version 0.9.10 available. As usuas, this means that
+            New upstream version 0.9.10 available. As usual, this means that
             spotify-make does not work until we have updated it for the
             new version. Stay tuned.
 
