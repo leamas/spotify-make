@@ -82,6 +82,9 @@ unpack: check_sources
 	mv $(DESTDIR)$(app_datadir)/Data/libcef.so $(DESTDIR)$(app_libdir)
 	mv $(DESTDIR)$(app_datadir)/Data/SpotifyHelper $(DESTDIR)$(app_libdir)/Data
 	mv $(DESTDIR)$(app_datadir)/spotify $(DESTDIR)$(app_libdir)
+	tar xzf control.tar.gz
+	mv control md5sums $(DESTDIR)$(app_datadir)
+	@rm -f prerm postinst
 
 set_so_perms: unpack
 	@# Set so files perms to 755 (e. g, fedora) or 644 (e. g. debian).
