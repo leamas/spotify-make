@@ -10,6 +10,11 @@ three usecases:
 
 ## News
 
+#### 2014-05-20:
+            New upstream version 0.9.10 available. As usuas, this means that
+            spotify-make does not work until we have updated it for the
+            new version. Stay tuned.
+
 #### 2013-10-17:
             The directory layout problems is resolved (see bug #19).
 
@@ -22,9 +27,6 @@ three usecases:
             Updated to 0.9.4.183.g644e24e.428. New libraries for Fedora added,
             ther OS are likely to run into problems with missing libraries.
             Please open issues for any such problems.
-
-#### 2013-05-03:
-            Updated to upstream 0.9.0.133 release.
 
 ## Feedback
 
