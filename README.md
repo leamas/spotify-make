@@ -9,6 +9,11 @@ three usecases:
   - Temporary installs used in a packaging context.
 
 ## News
+#### 2014-09-02:
+	    Spotify has released a new version 0.9.11.27.g2b1a638c. There
+            is still no 32-bit build, see below. According to preliminary
+            tests spotify-make works out of the box with the new version.
+
 #### 2014-05-26:
             Support for new version 0.9.10 available (64-bits hosts only,
             see below).
@@ -18,12 +23,6 @@ three usecases:
             Note that this only builds 0.9.10 for x86_64 hosts, the i386
             code is stll at 0.9.4 - this depends on upstream which havn't
             built a i386 version at this point. Testing and bugs appreciated!
-
-#### 2014-05-20:
-            New upstream version 0.9.10 available. As usual, this means that
-            spotify-make does not work until we have updated it for the
-            new version. Stay tuned.
-
 
 ## Feedback
 
