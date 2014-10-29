@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Copyright 2014 Alec Leamas <leamas@nowhere.net> -->
+<application>
+ <id type="desktop">spotify.desktop</id>
+ <metadata_license>CC0-1.0</metadata_license>
+ <project_license>non-redistributable, no changes permitted</project_license>
+ <name>Spotify Native Linux Client</name>
+ <summary>Listem to Spotify streaming music </summary>
+ <description>
+  <p>
+Think of Spotify as your new music collection. Your library. Only this time
+your collection is vast: millions of tracks and counting.  Spotify comes in
+all shapes and sizes, available for your PC, Mac, home audio system and
+mobile phone. Wherever you go, your music follows you. And because the music
+plays live, there’s no need to wait for downloads and no big dent in your
+hard drive. 
+  </p>
+  <p>
+There are are two ways to listen to spotify using linux: Using the web-based
+service or using this native client. 
+  </p>
+ </description>
+ <screenshots>
+  <screenshot type="default">http://leamas.fedorapeople.org/lpf-spotify-client/screenshot.png</screenshot>
+ </screenshots>
+ <updatecontact>http://bugzilla.rpmfusion.org</updatecontact>
+ <url type="homepage"> http://www.spotify.com/se/blog/archives/2010/07/12/linux/</url>
+</application>

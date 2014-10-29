@@ -112,6 +112,10 @@ applinks: unpack
 	    done
 	ln -s $(lib_to_data)/licenses.xhtml $(DESTDIR)$(app_libdir)
 
+appdata:
+	mkdir $(DESTDIR)$(datadir)/appdata  || echo '(ignored)'
+	cp appdata.xml $(DESTDIR)$(datadir)/appdata/spotify.xml
+
 syslinks: unpack bundled
 	@# Match unresolved references found using ldd with system libs
 	@# in linker cache found using ldconfig -p. Create links and
@@ -141,7 +145,7 @@ syslinks: unpack bundled
 	    fi                                                           \
 	done || :
 
-desktop:  unpack check_sources
+desktop:  unpack check_sources appdata
 	@# Install icons, desktop file etc.
 	@icondir="$(DESTDIR)$(datadir)/icons/hicolor";                   \
 	src_icons="$(DESTDIR)$(app_datadir)/Icons";                      \
