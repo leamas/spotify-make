@@ -113,7 +113,7 @@ applinks: unpack
 	ln -s $(lib_to_data)/licenses.xhtml $(DESTDIR)$(app_libdir)
 
 appdata:
-	mkdir $(DESTDIR)$(datadir)/appdata  || echo '(ignored)'
+	mkdir -p $(DESTDIR)$(datadir)/appdata  || echo '(ignored)'
 	cp appdata.xml $(DESTDIR)$(datadir)/appdata/spotify.xml
 
 syslinks: unpack bundled
