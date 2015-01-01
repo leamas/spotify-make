@@ -175,6 +175,8 @@ case "$dist" in
         echo -n "($dist handled as RHEL)..."
         dist='RHEL'
         ;;
+    *SUSE*)
+	dist='SUSE'
     *)
         echo -n "(no \"special configuration\" of distro needed)..."
         ;;
