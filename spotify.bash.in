@@ -24,6 +24,11 @@ cat /proc/cpuinfo | grep -q 'sse2' || {
     exit 1
 }
 
+# board= https://community.spotify.com/t5/Help-Desktop-Linux-Mac-and
+# $board/quot-Failed-loading-skin-quot-error-on-Ubuntu-GNOME-13-04/m-p/1013124#M107324
+unset DESKTOP_SESSION
+unset GNOME_DESKTOP_SESSION_ID
+
 # Check that we have write access to /dev/snd/*
 snd_sample=$( find /dev/snd -type c | head -1 )
 [ -w "$snd_sample" ] || {
