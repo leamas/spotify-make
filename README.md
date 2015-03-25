@@ -9,6 +9,12 @@ three usecases:
   - Temporary installs used in a packaging context.
 
 ## News
+#### 2015-03-25:
+            Spotify has released a new version 0.9.17.1.g9b85d43.7.Still
+            no 32-bit support. There is some work needed to handle the
+            new version, until that point spotify-make will not work. Stay
+            tuned...
+
 #### 2014-09-02:
 	    Spotify has released a new version 0.9.11.27.g2b1a638c. There
             is still no 32-bit build, see below. According to preliminary
