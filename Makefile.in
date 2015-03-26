@@ -74,7 +74,7 @@ $(archive):
 unpack: check_sources
 	@# Unpack into libdir (arched files) and datadir(noarch).
 	ar x $(archive)
-	tar xzf data.tar.gz
+	tar xpf data.tar.xz
 	@rm -rf $(DESTDIR)$(app_libdir) $(DESTDIR)/$(app_datadir)
 	@mkdir -p $(DESTDIR)$(app_libdir)/Data || :
 	@mkdir -p $(DESTDIR)$(app_datadir) || :
@@ -201,5 +201,5 @@ uninstall:
 
 clean:
 	rm -rf $(archive) spotify.bash opt usr
-	rm -rf control.tar.gz data.tar.gz *.deb debian-binary github
+	rm -rf control.tar.gz data.tar.xz *.deb debian-binary github
 	rm -f spotify.desktop Makefile
