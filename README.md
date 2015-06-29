@@ -9,6 +9,11 @@ three usecases:
   - Temporary installs used in a packaging context.
 
 ## News
+#### 2015-06-29:
+            Spotify has released a new 1.0.7.153 version. There is
+            some provisionary support for this in the devel branch,
+            but the new version seems buggy.
+
 #### 2015-03-25:
             Spotify has released a new version 0.9.17.1.g9b85d43.7.Still
             no 32-bit support. There is some work needed to handle the
