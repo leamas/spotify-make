@@ -15,7 +15,7 @@ dist          = @dist@
 arch          = @arch@
 archlib       = @archlib@
 binary        = @binary@
-repo          = http://repository.spotify.com/pool/non-free/s/spotify
+repo          = http://repository.spotify.com/pool/non-free/s/spotify-client
 version       = @version@
 archive       = @archive@
 so_perms      = @so_perms@
@@ -49,6 +49,9 @@ lib_to_data  := $(shell python -c 'import os.path;                          \
                                                          "$(app_libdir)")')
 all: help
 
+lib_to_data:
+	echo lib_to_data: $(lib_to_data)
+
 help:
 	@echo -e "\n$(help_msg)\n"
 
@@ -78,10 +81,9 @@ unpack: check_sources
 	@rm -rf $(DESTDIR)$(app_libdir) $(DESTDIR)/$(app_datadir)
 	@mkdir -p $(DESTDIR)$(app_libdir)/Data || :
 	@mkdir -p $(DESTDIR)$(app_datadir) || :
-	cp -ar ./opt/spotify/spotify-client/*  $(DESTDIR)$(app_datadir)
-	mv $(DESTDIR)$(app_datadir)/Data/libcef.so $(DESTDIR)$(app_libdir)
-	mv $(DESTDIR)$(app_datadir)/Data/SpotifyHelper $(DESTDIR)$(app_libdir)/Data
-	mv $(DESTDIR)$(app_datadir)/spotify $(DESTDIR)$(app_libdir)
+	cp -ar ./usr/share/spotify/*  $(DESTDIR)$(app_datadir)
+	mv $(DESTDIR)$(app_datadir)/libcef.so $(DESTDIR)$(app_libdir)
+	cp ./usr/bin/spotify $(DESTDIR)$(app_libdir)
 	tar xzf control.tar.gz
 	mv control md5sums $(DESTDIR)$(app_datadir)
 	@rm -f prerm postinst
@@ -106,11 +108,10 @@ endif
 
 applinks: unpack
 	@# Add links to datadir in libdir (where things are searched for).
-	cd $(DESTDIR)$(app_libdir)/Data; \
-	    for f in $(DESTDIR)$(app_datadir)/Data/*; do \
-	        ln -s ../$(lib_to_data)/Data/$$(basename $$f) . ; \
+	cd $(DESTDIR)$(app_libdir); \
+	    for f in $(DESTDIR)$(app_datadir)/*; do \
+	        ln -sf $(lib_to_data)/$$(basename $$f) . ; \
 	    done
-	ln -s $(lib_to_data)/licenses.xhtml $(DESTDIR)$(app_libdir)
 
 appdata:
 	mkdir -p $(DESTDIR)$(datadir)/appdata  || echo '(ignored)'
@@ -148,7 +149,7 @@ syslinks: unpack bundled
 desktop:  unpack check_sources appdata
 	@# Install icons, desktop file etc.
 	@icondir="$(DESTDIR)$(datadir)/icons/hicolor";                   \
-	src_icons="$(DESTDIR)$(app_datadir)/Icons";                      \
+	src_icons="$(DESTDIR)$(app_datadir)/icons";                      \
 	echo "Installing icons in $$icondir";                            \
 	for size in 24 32 48 64 128 256; do                              \
 	    install -m 644 -pD  $$src_icons/spotify-linux-$$size.png     \

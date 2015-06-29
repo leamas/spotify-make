@@ -195,10 +195,11 @@ echo $arch
 
 if [ -z "$package" ]; then
     echo -n "Determining version:... "
-    wget -qO spotify.dir http://repository.spotify.com/pool/non-free/s/spotify
+    wget -qO spotify.dir http://repository.spotify.com/pool/non-free/s/spotify-client
     version=$(grep "spotify-client_.*$arch.deb" spotify.dir \
                   | sed 's/.*spotify-client_\([^-]*\).*/\1/' \
                   | sed -r 's/[ ]+/\n/g' \
+                  | sed 's|</a>||' \
                   | sort | tail -1 )
 
 else
@@ -286,5 +287,5 @@ fi
 
 echo "Writing spotify.bash"
 sed  -e "/spotify=/s|=.*|=$libdir/spotify-client/spotify|" \
-     -e "/version=/s/=.*/=$version/"        \
+     -e "/version=/s|=.*|=$version|"        \
      <spotify.bash.in >spotify.bash
