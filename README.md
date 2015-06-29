@@ -9,6 +9,12 @@ three usecases:
   - Temporary installs used in a packaging context.
 
 ## News
+#### 2015-06-29:
+            Spotify has released a new 1.0.7.153 version. spotify-make
+            has preliminary support for this. However, the application
+            grabs the complete window, and there are no means whatsoever
+            to minimize or exit. Use alt-F4 or similar window manager
+            shortcuts to exit. Old version seems to still be around.
 #### 2015-03-25:
             Spotify has released a new version 0.9.17.1.g9b85d43.7.Still
             no 32-bit support. There is some work needed to handle the
