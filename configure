@@ -93,7 +93,7 @@ fi
 echo "    ldconfig:... $sts"
 
 echo -n "    python: "
-sts="$(python --version 2>&1) (ok)" || sts="ERROR: Not found"
+sts="$(python3 --version 2>&1) (ok)" || sts="ERROR: Not found"
 echo $sts
 
 if [  -z "$package" ]; then
@@ -158,18 +158,9 @@ echo -n "Determining distro:... "
 dist=$(lsb_release -i || echo "Unknown")
 dist=$( echo ${dist##*:} )
 case "$dist" in
-    Ubuntu)
-        echo -n '(LinuxMint handled as)... '
+    Ubuntu|Debian)
+        echo -n "($dist handled as Ubuntu)..."
         dist='Ubuntu'
-        ;;
-    Debian)
-        if [[ "$( lsb_release -r)" == *7.[0-9] ]]; then
-            echo -n '(Debian 7.0 Wheeze handled as)...'
-            dist='Ubuntu'
-        elif [[ "$( lsb_release -r)" == *'unstable' ]]; then
-            echo -n '(Debian unstable handled as)...'
-            dist='Ubuntu'
-        fi
         ;;
     CentOS|RedHat*)
         echo -n "($dist handled as RHEL)..."
@@ -207,32 +198,6 @@ else
     echo -n "Digging out version from --file:..."
 fi
 echo $version
-
-# Check for openlssl-compatibility package on distros determined as RHEL,
-if [ "$dist" = "RHEL" ]; then
-    # Just to be sure we got what we need,
-    echo -n "Locating rpm-binary:... "
-    if command -v rpm &> /dev/null ; then
-        sts=$(rpm --version)
-        echo "$sts (ok)"
-    else
-        echo -n >&2 "Cannot find rpm-binary. Your installation is seriously "
-        echo    >&2 "broken. Giving up."
-        exit 2;
-    fi
-
-    # Try to locate the necessary openssl-libraries,
-    echo -n "Checking for openssl098e-compatibility libraries..."
-    if [[ -f $(rpm --eval %_libdir/libssl.so.0.9.8e) &&
-          -f $(rpm --eval %_libdir/libcrypto.so.0.9.8e) ]] ; then
-        echo "found (ok)"
-    else
-        echo >&2 "Could not find necessary openssl098e-compatibility libraries."
-        echo -n >&2 "Suggestion: Try to install package with 'sudo yum install "
-        echo >&2 "-y openssl098e'."
-        exit 2
-    fi
-fi
 
 if [ -z "$package" ]; then
     echo -n "Determine .deb file..."
@@ -286,6 +251,6 @@ if [[ "$binary" = my* ]]; then
 fi
 
 echo "Writing spotify.bash"
-sed  -e "/spotify=/s|=.*|=$libdir/spotify-client/spotify|" \
+sed  -e "/spotify=/s|=.*|=$datadir/spotify-client/spotify|" \
      -e "/version=/s|=.*|=$version|"        \
      <spotify.bash.in >spotify.bash

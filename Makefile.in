@@ -31,22 +31,10 @@ DOCS          =
 
 
 SOURCES       = spotify.bash spotify.1 spotify.desktop $(archive)
-ifeq ($(dist),Fedora)
-SOURCES      += $(wildcard fedora/$(arch)/*.so.*)
-else ifeq ($(dist),Ubuntu)
-SOURCES      += $(wildcard ubuntu/$(arch)/*.so.*)
-DOCS         += $(wildcard ubuntu/$(arch)/*)
-else ifeq ($(dist),Mageia)
-SOURCES      += $(wildcard mageia2/$(arch)/*.so.*)
-DOCS         += $(wildcard mageia2/doc/*)
-else ifeq ($(dist),RHEL)
-SOURCES      += $(wildcard rhel/$(arch)/*)
-DOCS         += $(wildcard rhel/doc/*)
-endif
 
-lib_to_data  := $(shell python -c 'import os.path;                          \
-                                   print os.path.relpath("$(app_datadir)",  \
-                                                         "$(app_libdir)")')
+lib_to_data  := $(shell python3 -c 'import os.path; 		\
+					print(os.path.relpath("$(app_datadir)",	\
+					"$(app_libdir)"))')
 all: help
 
 lib_to_data:
@@ -77,74 +65,24 @@ $(archive):
 unpack: check_sources
 	@# Unpack into libdir (arched files) and datadir(noarch).
 	ar x $(archive)
-	tar xzf data.tar.gz
+	tar xf data.tar.*
 	@rm -rf $(DESTDIR)$(app_libdir) $(DESTDIR)/$(app_datadir)
-	@mkdir -p $(DESTDIR)$(app_libdir)/Data || :
 	@mkdir -p $(DESTDIR)$(app_datadir) || :
 	cp -ar ./usr/share/spotify/*  $(DESTDIR)$(app_datadir)
-	mv $(DESTDIR)$(app_datadir)/libcef.so $(DESTDIR)$(app_libdir)
-	cp ./usr/bin/spotify $(DESTDIR)$(app_libdir)
-	tar xzf control.tar.gz
-	mv control md5sums $(DESTDIR)$(app_datadir)
+	tar xf control.tar.*
 	@rm -f prerm postinst
 
 set_so_perms: unpack
 	@# Set so files perms to 755 (e. g, fedora) or 644 (e. g. debian).
 	chmod $(so_perms) \
-	    $$( find $(DESTDIR)$(app_libdir) -name '*.so*' -writable)
+	    $$( find $(DESTDIR)$(app_datadir) -name '*.so*' -writable)
 
 bundled:  check_sources unpack
 	[ -n "$(DOCS)" ] && cp -a $(DOCS) $(DESTDIR)$(app_datadir) || :
-ifeq ($(dist),Fedora)
-	cp -a fedora/$(arch)/*.so.* $(DESTDIR)$(app_libdir)
-else ifeq ($(dist),Ubuntu)
-	cp -a ubuntu/$(arch)/libssl.so.0.9.8 $(DESTDIR)$(app_libdir)
-	cp -a ubuntu/$(arch)/libcrypto.so.0.9.8 $(DESTDIR)$(app_libdir)
-else ifeq ($(dist),Mageia)
-	cp -a mageia2/$(arch)/libQtDBus.so.4.8.1 $(DESTDIR)$(app_libdir)
-else ifeq ($(dist),RHEL)
-	cp -ra rhel/$(arch)/* $(DESTDIR)$(app_libdir)
-endif
-
-applinks: unpack
-	@# Add links to datadir in libdir (where things are searched for).
-	cd $(DESTDIR)$(app_libdir); \
-	    for f in $(DESTDIR)$(app_datadir)/*; do \
-	        ln -sf $(lib_to_data)/$$(basename $$f) . ; \
-	    done
 
 appdata:
 	mkdir -p $(DESTDIR)$(datadir)/appdata  || echo '(ignored)'
 	cp appdata.xml $(DESTDIR)$(datadir)/appdata/spotify.xml
-
-syslinks: unpack bundled
-	@# Match unresolved references found using ldd with system libs
-	@# in linker cache found using ldconfig -p. Create links and
-	@# report. If distro is RHEL handle linkage to libssl/libcrypto
-	@# separately against openssl098e-compatibility libs.
-	@cd $(DESTDIR)$(app_libdir);                                     \
-	hostlink_libssl='libssl.so.1.*0.*';                              \
-	hostlink_libcrypto='libcrypto.so.1.*0.*';                        \
-	if [[ "$(dist)" == "RHEL" ]]; then                               \
-	  hostlink_libssl='libssl.so.6';                                 \
-	  hostlink_libcrypto='libcrypto.so.6';                           \
-	fi;                                                              \
-	for dep in $$( ldd  spotify | awk '/found$$/ {print $$1}' ); do  \
-	    case $$dep in                                                \
-	        libssl*)     hostlink="$$hostlink_libssl" ;;             \
-	        libcrypto*)  hostlink="$$hostlink_libcrypto" ;;          \
-	        libudev*)    hostlink='libudev.so.1.*.*' ;;              \
-	        *)           hostlink="$${dep%%.*}" ;;                   \
-	    esac;                                                        \
-	    hostlink=$$( ldconfig -p | grep $$hostlink | sed 's/.*=>//'  \
-	                 | egrep -m1 '$(archlib)' || :);                 \
-	    if test "$$hostlink" != ''; then                             \
-	        ln -sf $$hostlink $$dep;                                 \
-	        echo INFO: "resolving $$dep as \"$$hostlink\"";          \
-	    else                                                         \
-	        echo "WARNING; cant resolve spotify dependency: $$dep" ; \
-	    fi                                                           \
-	done || :
 
 desktop:  unpack check_sources appdata
 	@# Install icons, desktop file etc.
@@ -167,7 +105,7 @@ addons: check_sources
 	install -m 755 -pD spotify.bash $(DESTDIR)$(bindir)/$(binary)
 	install -m 644 -pD spotify.1 $(DESTDIR)$(mandir)/man1/$(binary).1
 
-install: applinks syslinks unpack addons bundled desktop set_so_perms
+install: unpack addons bundled desktop set_so_perms
 	cp Makefile $(DESTDIR)$(app_datadir)
 	cp README.md  $(DESTDIR)$(app_datadir)
 
@@ -202,5 +140,5 @@ uninstall:
 
 clean:
 	rm -rf $(archive) spotify.bash opt usr
-	rm -rf control.tar.gz data.tar.gz *.deb debian-binary github
+	rm -rf control.tar.* data.tar.* *.deb debian-binary github
 	rm -f spotify.desktop Makefile
